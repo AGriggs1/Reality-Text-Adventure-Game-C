@@ -1,0 +1,16 @@
++Locale
+-LongDescription:String
+-ShortDescription:String
+-ID:int
+-Items:String[]
+
++Locale(LongDescription:String, ShortDescription:String, ID:int, Items:String[])
+
++GetLocationDescription():String
++GetID():int
++GetItems():String[]
+
++SetID(ID:int):void
++RemoveItem(Item:String):boolean
++AddItem(Item:String):boolean
++Reset():void

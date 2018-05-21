@@ -1,0 +1,68 @@
+Anthony Griggs
+5-21-2018
+Requirements specification for C++ Project
+
+
+The main problem I am facing is that I am not familiar with the
+programming languange known as C++. 
+
+It is my hope to find a solution by recreating my game coded 
+in Python, 'Reality'
+
+-The program must be in C++
+
+-The game must function as close possible to the Python version
+	-The program should accept input, and produce output
+	-The game should keep track of the player's score
+	-The game should keep track of the player's moves
+	-The game should keep track of locations players visit
+	-The game should keep track of items the player has
+	-The player should be able to use commands, including:
+		-Navigation
+		-Examining locations
+		-Getting long descriptions of locations
+		-Picking up items
+			-Accepts command and item in one instance
+			-Accepts command and item in two instances
+			-An item must be examined before it can be
+			picked up
+		-Using items
+			-Accepts command and item in one instance
+			-Accepts command and item in two instances
+		-Dropping items
+			-Accepts command and item in one instance
+			-Accepts command and iten in two instances
+		-Getting help
+		-Seeing your score
+		-Seeing how many moves you made
+		-Seeing the map (should be via using the map item)
+		-Seeing what items you havwe
+		-Quitting
+	-Locations should be mutable
+		-The program should be able to move them around
+		-The program should be able to replace one with another
+	-The game must be winnable
+		-Get to the final location
+	-The player must be able to lose
+		-Running out of moves
+		-Autokill locations
+	-Locations
+		-Must have a long description
+		-A short description
+		-be able to hold items
+		-be identifible
+		-should be capable of being inacessible if certain
+		criteria is not met
+	-The game should have developer commands that can be input
+	before the game begins
+		-Giving yourself every item in the game
+		-Starting off at a certain location
+		
+	-The game should be able to restart itself and reiIntialize
+	variables, without executing the program
+	-Items
+		-Have a name
+		-A defined use
+		-Be capable of have a prerequisite before they
+		can be picked up or used
+	-
