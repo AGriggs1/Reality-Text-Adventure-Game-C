@@ -1,16 +1,16 @@
 +Player
 
--Location:String
--Score:int
--Moves:int
--Name:String
+-_locale:locale
+-_score:int
+-_moves:int
+-_name:String
 
-+Player(startingLocale:Locale)
++Player(name:String, startingLocale:Locale)
 
-+GetLocale():String
++GetLocale():Locale
 +GetScore():int
 +GetMoves():int
 +GetName():String
 
-+SetLocale(location:Locale):void
-+SetScore(newScore:int):void
++SetLocale(locale:Locale):void
++SetScore(score:int):void
