@@ -30,5 +30,15 @@ int main() {
     getline(cin, dummy);
     cout << bed << endl << cont << "continue>" << endl;
     getline(cin, dummy);
+    cout << "You hop out of bed, eager to start your day. You open the door leading to the rest of your home, and are met with shock." << endl << cont << "continue>" << endl;
+    getline(cin, dummy);
+    cout << "Nothing but shock. Nothing, but, shock. There's nothing. Just the vast empty space you started off in. What is going on?! This cannot be real! You must still be sleeping! Why can't you just wake up?!" << endl << cont << "continue>" << endl;
+    getline(cin, dummy);
+    //Dios ayudale. It's him.
+    cout << "???: Wrong. You cannot be dreaming. In fact, you are more conscious than you've ever been in your life." << endl << cont << "continue>" << endl;
+    getline(cin, dummy);
+    cout << "Who said that?! And how did they know what you were thinking?! This is starting to feel malicious!" << endl << cont << "continue>" << endl;
+    getline(cin, dummy);
+    cout << "???: Humans are always so predictable. It's quite dull, really. You are awake. What you see before you, or rather, what you don't, is real. Like it or not, this... this is your reality." << endl << cont << "continue>" << endl;
     return 0;
 }
