@@ -13,19 +13,40 @@ in Python, 'Reality'
 
 -The game must function as close possible to the Python version
 	-The program should accept input, and produce output
+	-Input will entirely originate from a user typing on a keyboard, and only a keyboard
+	-Input will be done via a console window, preferably an IDE such as JetBrain's CLion
+	-Output will be displayed via a console window
+	-The game must be capable of accepting incorrect input of any kind without crashing, in all contexts
 	-The game should keep track of the player's score
+		-Score is updated by visiting a new location
 	-The game should keep track of the player's moves
+		-A move is whenever a player changes locations
 	-The game should keep track of locations players visit
-	-The game should keep track of items the player has
+	-The game should keep track of items the player has, such as an inventory
 	-The player should be able to use commands, including:
 		-Navigation
+			-The player can move in six directions, if elligible:
+				-North (Up, lateral)
+				-South (Down, lateral)
+				-East (Right, lateral)
+				-West (Left, lateral)
+				-Up (Vertical)
+				-Down (Vertical) 
+			-Navigation is handled by a two-dimensional array, or matrix
+				-The row of the array defines a location at that instance
+				-The column of a row defines where you can go at that row
+				-Therefore, the amount of rows is equal to the amount of locations that make it into the game
+					-Each location must have a row in the matrix such that it can be easily identified
+				-The amount of columns for each row will always be six, since the player can move in six directions
+	
 		-Examining locations
+			-This provides details of the location the player is at, and reveals any items at that location
 		-Getting long descriptions of locations
 		-Picking up items
 			-Accepts command and item in one instance
 			-Accepts command and item in two instances
 			-An item must be examined before it can be
-			picked up
+			picked up, unless the player put the item there themselves
 		-Using items
 			-Accepts command and item in one instance
 			-Accepts command and item in two instances
@@ -33,11 +54,14 @@ in Python, 'Reality'
 			-Accepts command and item in one instance
 			-Accepts command and iten in two instances
 		-Getting help
+			-Displays all of the commands availible to the user
 		-Seeing your score
 		-Seeing how many moves you made
 		-Seeing the map (should be via using the map item)
-		-Seeing what items you havwe
+		-Seeing what items you have
 		-Quitting
+			-Either terminates the program at the user's affirmation
+			-Or allows the user to restart the game
 	-Locations should be mutable
 		-The program should be able to move them around
 		-The program should be able to replace one with another
@@ -58,7 +82,7 @@ in Python, 'Reality'
 		-Giving yourself every item in the game
 		-Starting off at a certain location
 		
-	-The game should be able to restart itself and reiIntialize
+	-The game should be able to restart itself and reintialize
 	variables, without executing the program
 	-Items
 		-Have a name
