@@ -1,8 +1,9 @@
 +Locale
--LongDescription:String
--ShortDescription:String
--ID:int
--Items:String[]
+-longDescription:String
+-_shortDescription:String
+-_ID:int
+-_visited:boolean
+-_items:String[]
 
 +Locale(LongDescription:String, ShortDescription:String, ID:int, Items:String[])
 
@@ -11,6 +12,7 @@
 +GetItems():String[]
 
 +SetID(ID:int):void
++UpdateVisited():boolean
 +RemoveItem(Item:String):boolean
 +AddItem(Item:String):boolean
 +Reset():void
