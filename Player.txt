@@ -1,16 +1,20 @@
 +Player
 
--_locale:locale
+-_locale:Locale
 -_score:int
 -_moves:int
--_name:String
+-_inventory:String[]
++_name:String
 
 +Player(name:String, startingLocale:Locale)
 
 +GetLocale():Locale
 +GetScore():int
 +GetMoves():int
-+GetName():String
 
 +SetLocale(locale:Locale):void
 +SetScore(score:int):void
+
++RemoveItem(item:String):String
++AddItem(item:String):boolean
++PrintInventory():void
