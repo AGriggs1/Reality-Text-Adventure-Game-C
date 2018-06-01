@@ -1,18 +1,20 @@
 +Locale
--longDescription:String
--_shortDescription:String
++_longDescription:String
++_shortDescription:String
++_examineDescription:String
 -_ID:int
 -_visited:boolean
 -_items:String[]
+-ITEMS:String[]
 
-+Locale(LongDescription:String, ShortDescription:String, ID:int, Items:String[])
++Locale(longDescription:String, shortDescription:String, examineDescription:String, ID:int, Items:String[])
 
 +GetLocationDescription():String
 +GetID():int
-+GetItems():String[]
++GetItemByIndex(item:String):int
 
-+SetID(ID:int):void
 +UpdateVisited():boolean
-+RemoveItem(Item:String):boolean
-+AddItem(Item:String):boolean
++RemoveItem(item:String):String
++AddItem(item:String):boolean
++PrintItems():void
 +Reset():void
