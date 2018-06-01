@@ -4,8 +4,8 @@
 //Author: Anthony Griggs
 //5-24-18
 //Reality Text Adventure Game vC++
-//Branch Part1
-//This branch is concerned with figuring out input/output for the game.
+//Branch part2
+//This branch will be concerned with created the Player and Locale objects, and begin creating the utilty functions used by the game.
 //Most of my info for writing C++ programs is coming from http://www.cplusplus.com/doc/tutorial/
 
 using namespace std; //used so we don't have to type std::cout
@@ -17,9 +17,38 @@ string forest = "The office disappears, and turns into a forest. You begin to fi
 string bed = "You are in your bed. Finally! It's over.";
 
 string cont = "<Press enter to ";
+/*
+ *
+ * UTILITY FUNCTIONS
+ *
+ */
+
+/*
+ * copyright
+ * Accepts an int and a boolean
+ * prints out a standard copyright message, and acts the gameover message if elligible
+ */
+bool copyright(int score, bool gameOver) {
+    string message = "Copyright Anthony Griggs, Anthony.Griggs1@marist.edu";
+    if(gameOver) {
+        cout << "Final score: " << score << endl;
+        cout << "Gameover!\nThanks for playing!" << endl << message;
+        //TODO: insert prompt for user to restart, once we reach that capability
+        return false;
+    }
+    cout << message;
+    //TODO: look into a finding a method that will force terminate the program.
+}
+/*
+ *
+ *  INITIALIZATION FUNCTION
+ *
+ */
 int main() {
     // << is concatenation
     string dummy;
+    copyright(0, false);
+    cout << endl;
     cout << nowhere << endl << cont << "continue>" << endl; //endl--endline--Would make more sense if it was endln, but whatever
     //Use cin to give the player control?
   //  cin; //Doesn't work. Doing cin >> <string> requires the user to input a character before hitting enter, and that's not what I want.
@@ -40,5 +69,6 @@ int main() {
     cout << "Who said that?! And how did they know what you were thinking?! This is starting to feel malicious!" << endl << cont << "continue>" << endl;
     getline(cin, dummy);
     cout << "???: Humans are always so predictable. It's quite dull, really. You are awake. What you see before you, or rather, what you don't, is real. Like it or not, this... this is your reality." << endl << cont << "continue>" << endl;
+    copyright(10, true);
     return 0;
 }
