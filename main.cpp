@@ -1,5 +1,6 @@
 #include <iostream>
-#include <string>
+
+#include "Locale.h"
 
 //Author: Anthony Griggs
 //5-24-18
@@ -10,8 +11,17 @@
 
 using namespace std; //used so we don't have to type std::cout
 
-//Define our locations as strings for now
-string nowhere = "You find yourself in an empty, white space. A void. How? Why? Where? Who? Many thoughts race through your head, with no definitive answer manifesting...";
+
+/*
+ * Define locales
+ */
+string longDesc = "You find yourself in an empty, white space. A void. How? Why? Where? Who? Many thoughts race through your head, with no definitive answer manifesting...";
+string shortDesc = "You are nowhere, it seems.";
+string examineDesc = "You see nothing of use.";
+//Locale nowhere(array<string, 100>, "You find yourself in an empty, white space. A void. How? Why? Where? Who? Many thoughts race through your head, with no definitive answer manifesting...",
+        //       "You are nowhere, it seems.", "You see nothing of use."); //Can't use string literals in when creating objects. Lovely.
+Locale nowhere(string items[1000] = {}, longDesc, string(shortDesc), string(examineDesc)); //Also have to typecast string to string, fun and not at all a waste of my patience.
+
 string office = "You now find yourself in an office. Elegant. Wait. WAIT. What happened to every, erm, nothing? You were just in the middle of nowhere! This isn't right!";
 string forest = "The office disappears, and turns into a forest. You begin to figure it out: you must be dreaming! You breathe a sigh of relief. Soon this wierd dream will all be over, you'll wake up, and return to normal life.";
 string bed = "You are in your bed. Finally! It's over.";
@@ -22,7 +32,7 @@ string cont = "<Press enter to ";
  * UTILITY FUNCTIONS
  *
  */
-
+//
 /*
  * copyright
  * Accepts an int and a boolean
