@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <string>
 #include "Locale.h"
 
 //Author: Anthony Griggs
@@ -18,9 +18,9 @@ using namespace std; //used so we don't have to type std::cout
 string longDesc = "You find yourself in an empty, white space. A void. How? Why? Where? Who? Many thoughts race through your head, with no definitive answer manifesting...";
 string shortDesc = "You are nowhere, it seems.";
 string examineDesc = "You see nothing of use.";
-//Locale nowhere(array<string, 100>, "You find yourself in an empty, white space. A void. How? Why? Where? Who? Many thoughts race through your head, with no definitive answer manifesting...",
-        //       "You are nowhere, it seems.", "You see nothing of use."); //Can't use string literals in when creating objects. Lovely.
-Locale nowhere(string items[1000] = {}, longDesc, string(shortDesc), string(examineDesc)); //Also have to typecast string to string, fun and not at all a waste of my patience.
+string items[100];
+
+Locale nowhere(0, items, longDesc, shortDesc, examineDesc);
 
 string office = "You now find yourself in an office. Elegant. Wait. WAIT. What happened to every, erm, nothing? You were just in the middle of nowhere! This isn't right!";
 string forest = "The office disappears, and turns into a forest. You begin to figure it out: you must be dreaming! You breathe a sigh of relief. Soon this wierd dream will all be over, you'll wake up, and return to normal life.";
@@ -59,7 +59,7 @@ int main() {
     string dummy;
     copyright(0, false);
     cout << endl;
-    cout << nowhere << endl << cont << "continue>" << endl; //endl--endline--Would make more sense if it was endln, but whatever
+  //  cout << nowhere << endl << cont << "continue>" << endl; //endl--endline--Would make more sense if it was endln, but whatever
     //Use cin to give the player control?
   //  cin; //Doesn't work. Doing cin >> <string> requires the user to input a character before hitting enter, and that's not what I want.
     getline(cin, dummy); //This seems to work, and will be better to use
