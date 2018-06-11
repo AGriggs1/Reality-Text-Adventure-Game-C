@@ -8,9 +8,9 @@ class Locale {
     //private instance variables
     int _ID;
     bool _visited;
-    static std::string _items[]; //Why are they static? Because it doesn't crash. That's all I know.
+    std::string _items[100];
     //These are used for resetting everything on restarts
-    static std::string ITEMS[];
+    std::string ITEMS[100];
     std::string DESC_LONG;
     std::string DESC_SHORT;
     std::string DESC_EXAMINE;
@@ -29,15 +29,15 @@ class Locale {
             //so getting the size of the array through something like arr.size() doesn't work, despite my IDE listing it. What is wrong with this language?
             //So if I wanted the size of the array, I'd also have to pass its length in the constructor, but nah.
             //Doing arr1 = arr2 usually results in arr2 simply referencing arr1 in most languages, and my intuition tells me C++ is the same
-            for(int i = 0; i < 1000; i++) {
+            for(int i = 0; i < 100; i++) {
                 _items[i] = items[i];
                 ITEMS[i] = items[i];
             }
         }
         //public instance variables
-        static std::string _longDescription;
-        static std::string _shortDescription;
-        static std::string _examineDescription;
+        std::string _longDescription;
+        std::string _shortDescription;
+        std::string _examineDescription;
         //getters
         std::string getLocationDescription() {
             if(_visited) return _shortDescription;
@@ -49,7 +49,7 @@ class Locale {
         //other
         void updateVisited() {
             if(!(_visited)) _visited = true;
-        };
+        }
        // std::string RemoveItem(std::string item);
    //     bool addItem(std::string item);
     //    void printItems();
