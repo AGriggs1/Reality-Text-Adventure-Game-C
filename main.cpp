@@ -60,6 +60,8 @@ int main() {
     copyright(0, false);
     cout << endl;
   //  cout << nowhere << endl << cont << "continue>" << endl; //endl--endline--Would make more sense if it was endln, but whatever
+    cout << nowhere.getLocationDescription() << endl;
+    cout << nowhere._examineDescription;
     //Use cin to give the player control?
   //  cin; //Doesn't work. Doing cin >> <string> requires the user to input a character before hitting enter, and that's not what I want.
     getline(cin, dummy); //This seems to work, and will be better to use
