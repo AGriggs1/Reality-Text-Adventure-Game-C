@@ -18,12 +18,25 @@ class Player {
         //public instance variables
         std::string _name;
         //Constructor
-            Player(std::string name, int startLocaleID) {
+        Player(std::string name, int startLocaleID) {
                 _name = name;
                 _currentLocaleID = startLocaleID;
                 _score = 0;
                 _moves = 0;
+        }
+        //Getters
+        int GetLocale() {return _currentLocaleID;}
+        int GetScore() {return _score;}
+        int GetMoves() {return _moves;}
+        //Setters
+        void UpdateID(int newLocaleID) {
+            _currentLocaleID = newLocaleID;
+            _moves++;
             }
+       // void SetScore(int score) {_score = score;}
+        void UpdateScore(int score) {_score += score;} //This seems more pratical
+        //TODO: AddItem, RemoveItem, PrintInventory
+
 
 
 };
