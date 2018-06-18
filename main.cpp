@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Locale.h"
+#include "Player.h"
 
 //Author: Anthony Griggs
 //5-24-18
@@ -25,6 +26,9 @@ Locale office(1, items, "You now find yourself in an office. Elegant. Wait. WAIT
 Locale forest(2, items, "The office disappears, and turns into a forest. You being to figure it out: you must be dreaming! You breathe a sigh of relief. Soon this weird dream will all be over, you'll wake up, and return to normal life.", "You're in a forest.", examineDesc);
 Locale bed(3, items, "You are in your bed. Finally! It's over.", "Wakey-wakey!", examineDesc);
 
+//Create an array to act as a dictionary for the locales
+Locale locations[50] = {nowhere, office, forest, bed};
+
 string cont = "continue";
 /*
  *
@@ -48,7 +52,10 @@ bool copyright(int score, bool gameOver) {
     cout << message;
     //TODO: look into a finding a method that will force terminate the program.
 }
-
+/*
+ * prompt
+ * used for prompts for the user to continue
+ */
 void prompt(string keyword) {
     cout << "<Press enter to " << keyword << ">";
 }
@@ -63,8 +70,13 @@ int main() {
     string dummy;
     copyright(0, false);
     cout << endl;
-    //First location
-    cout << nowhere.getLocationDescription() << endl;
+    cout << "Please enter your name.";
+    getline(cin, dummy);
+    //Create the player, initialize their start
+    Player mag(dummy, 0);
+    //Simulate the first location
+    //cout << nowhere.getLocationDescription() << endl;
+    cout << locations[mag.GetLocale()].getLocationDescription() << endl; //Just to show what it should like
     prompt(cont);
     getline(cin, dummy); //This seems to work, and will be better to use
     //Second location
