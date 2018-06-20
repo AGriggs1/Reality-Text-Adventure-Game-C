@@ -8,6 +8,7 @@
 class Locale {
     //private instance variables
     int _ID;
+    int _numItems;
     bool _visited;
     std::string _items[100];
     //These are used for resetting everything on restarts
@@ -43,6 +44,7 @@ class Locale {
             for (int i = 0; i < 100; i++) {
                 _items[i] = items[i];
                 ITEMS[i] = items[i];
+                if(items[i] != "") _numItems++; //If the string is blank, it cannot be an item!
             }
         }
         //getters
@@ -59,7 +61,9 @@ class Locale {
         }
        // std::string RemoveItem(std::string item);
    //     bool addItem(std::string item);
-    //    void printItems();
+        void printItems() {
+            for(int i = 0; i <= _numItems; i++) std::cout << _items[i] << std::endl;
+        };
      //   void reset();
 };
 //I know I can define the methods outside of the class definition, but why?

@@ -13,6 +13,7 @@ class Player {
     int _currentLocaleID;
     int _score;
     int _moves;
+    int _numItems;
     std::string _inventory[100];
     public:
         //public instance variables
