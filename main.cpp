@@ -45,11 +45,16 @@ bool copyright(int score, bool gameOver) {
     string message = "Copyright Anthony Griggs, Anthony.Griggs1@marist.edu";
     if(gameOver) {
         cout << "Final score: " << score << endl;
-        cout << "Gameover!\nThanks for playing!" << endl << message;
+        cout << "Gameover!\nThanks for playing!" << endl << message << endl;
+        cout << "Play again? y | n";
+        cin >> message;
         //TODO: insert prompt for user to restart, once we reach that capability
+        if(message == "y") return true;
         return false;
+
     }
     cout << message;
+    return true;
     //TODO: look into a finding a method that will force terminate the program.
 }
 /*
@@ -61,6 +66,23 @@ void prompt(string keyword) {
 }
 
 /*
+ * compareLocations
+ * compares two passed Locales by their IDS
+ * Hmmmm, this function was tacked on very late in the Python version's development... perhaps it might be redundant?
+ */
+bool compareLocations(Locale one, Locale two) {
+    return one.getID() == two.getID();
+}
+/*
+ * examineLocation
+ * prints the examine results at that location, as well as any item that may be there
+ */
+void examineLocation(Locale locale) {
+    cout << locale._examineDescription << endl;
+    cout << "You see a/an: " << endl;
+    locale.printItems();
+}
+/*
  *
  *  INITIALIZATION FUNCTION
  *
@@ -68,6 +90,8 @@ void prompt(string keyword) {
 int main() {
     // << is concatenation
     string dummy;
+    cout << dummy;
+    if(dummy == "") cout << "true";
     copyright(0, false);
     cout << endl;
     cout << "Please enter your name.";
