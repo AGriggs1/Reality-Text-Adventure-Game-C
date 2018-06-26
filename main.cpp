@@ -87,11 +87,9 @@ void examineLocation(Locale locale) {
  *  INITIALIZATION FUNCTION
  *
  */
-int main() {
+bool init() {
     // << is concatenation
     string dummy;
-    cout << dummy;
-    if(dummy == "") cout << "true";
     copyright(0, false);
     cout << endl;
     cout << "Please enter your name.";
@@ -100,7 +98,7 @@ int main() {
     Player mag(dummy, 0);
     //Simulate the first location
     //cout << nowhere.getLocationDescription() << endl;
-    cout << locations[mag.GetLocale()].getLocationDescription() << endl; //Just to show what it should like
+    cout << locations[mag.getLocale()].getLocationDescription() << endl; //Just to show what it should like
     prompt(cont);
     getline(cin, dummy); //This seems to work, and will be better to use
     //Second location
@@ -133,6 +131,10 @@ int main() {
 
     cout << "???: Humans are always so predictable. It's quite dull, really. You are awake. What you see before you, or rather, what you don't, is real. Like it or not, this... this is your reality." << endl;
     //prompt(cont);
-    copyright(10, true);
-    return 0;
+    while(true);
+    return copyright(10, true);
+
 }
+bool b = init();
+while(b);
+

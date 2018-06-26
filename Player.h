@@ -26,16 +26,16 @@ class Player {
                 _moves = 0;
         }
         //Getters
-        int GetLocale() {return _currentLocaleID;}
-        int GetScore() {return _score;}
-        int GetMoves() {return _moves;}
+        int getLocale() {return _currentLocaleID;}
+        int getScore() {return _score;}
+        int getMoves() {return _moves;}
         //Setters
-        void UpdateID(int newLocaleID) {
+        void updateID(int newLocaleID) {
             _currentLocaleID = newLocaleID;
             _moves++;
             }
        // void SetScore(int score) {_score = score;}
-        void UpdateScore(int score) {_score += score;} //This seems more pratical
+        void updateScore(int score) {_score += score;} //This seems more pratical
         //TODO: AddItem, RemoveItem, PrintInventory
 
 
