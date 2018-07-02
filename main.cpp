@@ -24,20 +24,20 @@ Locale voidC(1, items, "You are in the center circle. So. Where to first?", "You
 
 Locale voidN(2, items, "You follow the line North. Once you reach the circle, you notice it has the letter 'N' on it. "
                        "The void transforms into a lush forest teeming with pine trees. You hear the wind breeze through the trees, "
-                       "the songs of birds and feel welcome.", "You return to the forest", examineDesc);
+                       "the songs of birds and feel welcome.", "You are at the forest", examineDesc);
 
 Locale voidS(3, items, "You follow one of the lines to a circle that has the letter 'S' on it. "
                        "The area around transforms. Now you at the edge of a cliff overlooking the open sea. You hear the waves crashing "
                        "against the crags below, which resemble hungry teeth tearing into the vast watters, eager to do the same to you. You feel a sense of somberness.",
-                       "You return to the cliffside", examineDesc);
+                       "You're at the cliffside", examineDesc);
 
 Locale voidE(4, items, "You follow the line leading West, stopping at the circle with the letter 'W' on it. "
                        "The area transforms into the ruins of city. Cars rusted, buildings overgrown with moss and vines. Nature has reclaimed what it once lost."
-                       " You can't help but feel curious about the fate of this place.", "You retun to the city ruins.", examineDesc);
+                       " You can't help but feel curious about the fate of this place.", "You are at the city ruins.", examineDesc);
 
 Locale voidW(5, items, "You head East, coming to a circle with the letter 'E' on it. The area transforms,"
-                       " and now you are in an office. Desks overflowing with paperwork and the inescapable stench of stale cofee makes you feel anxious.",
-                        "You return to the office", examineDesc);
+                                    " and now you are in an office. Desks overflowing with paperwork and the inescapable stench of stale cofee makes you feel anxious.",
+                          "You are at the office", examineDesc);
 
 
 
@@ -48,7 +48,19 @@ Locale voidW(5, items, "You head East, coming to a circle with the letter 'E' on
 //Locale bed(3, items, "You are in your bed. Finally! It's over.", "Wakey-wakey!", examineDesc);
 
 //Create an array to act as a dictionary for the locales
+Locale na(-1, items, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
+//Also NULL doesn't work either because why would it?
 Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW};
+//NavMat
+
+Locale navigator[50][4] = {
+        {na, na, na, na},
+        {voidN, voidS, voidE, voidW}, //voidC
+        {na, voidC, na, na}, //voidN
+        {voidC, na, na, na}, //voidS
+        {na, na, na, voidC}, //voidE
+        {na, na, voidC, na} //voidW
+};
 
 string cont = "continue";
 /*
@@ -123,9 +135,16 @@ bool tutorial(Player love) {
         string command;
         cout << locations[love.getLocale()].getLocationDescription() << endl;
         getline(cin, command);
+        locations[love.getLocale()].updateVisited();
         //Check what the command was...
+        //navigation
+        if(command == "north") {
+            if(navigator[love.getLocale()][0].getID() > -1) love.updateID(navigator[love.getLocale()][0].getID());
+            else cout << "You cannot go that way." << endl;
+        }
+        //other
         //TODO: compareIgnoreCase
-        if(command == "quit") return true;
+        else if(command == "quit") return true;
         else if(command == "help") cout << "List of commands:\n"
                                            "Quit - ends the game\n"
                                            "Help - shows help\n"
@@ -136,7 +155,7 @@ bool tutorial(Player love) {
                                            "Look - displays the long description of your current location\n";
         else if(command == "look") cout << locations[love.getLocale()]._longDescription << endl;
         else if(command == "I know what I am doing I know that not all control paths return a value will you just run and not assume me to be an idiot?") completed = true;
-        locations[love.getLocale()].updateVisited();
+
     }
     return false;
 }
