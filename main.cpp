@@ -31,11 +31,11 @@ Locale voidS(3, items, "You follow one of the lines to a circle that has the let
                        "against the crags below, which resemble hungry teeth tearing into the vast watters, eager to do the same to you. You feel a sense of somberness.",
                        "You're at the cliffside", examineDesc);
 
-Locale voidE(4, items, "You follow the line leading West, stopping at the circle with the letter 'W' on it. "
+Locale voidE(4, items, "You follow the line leading East, stopping at the circle with the letter 'E' on it. "
                        "The area transforms into the ruins of city. Cars rusted, buildings overgrown with moss and vines. Nature has reclaimed what it once lost."
                        " You can't help but feel curious about the fate of this place.", "You are at the city ruins.", examineDesc);
 
-Locale voidW(5, items, "You head East, coming to a circle with the letter 'E' on it. The area transforms,"
+Locale voidW(5, items, "You head West, coming to a circle with the letter 'W' on it. The area transforms,"
                                     " and now you are in an office. Desks overflowing with paperwork and the inescapable stench of stale cofee makes you feel anxious.",
                           "You are at the office", examineDesc);
 
@@ -52,7 +52,8 @@ Locale na(-1, items, "This is stupid", "Seriously.", examineDesc); //So my null 
 //Also NULL doesn't work either because why would it?
 Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW};
 //NavMat
-
+        //navigator[localeID][iDirection] = Locale
+                //0 = North, 1 = South, 2 = East, 3 = West
 Locale navigator[50][4] = {
         {na, na, na, na},
         {voidN, voidS, voidE, voidW}, //voidC
@@ -139,7 +140,23 @@ bool tutorial(Player love) {
         //Check what the command was...
         //navigation
         if(command == "north") {
-            if(navigator[love.getLocale()][0].getID() > -1) love.updateID(navigator[love.getLocale()][0].getID());
+            int localeID = navigator[love.getLocale()][0].getID();
+            if(localeID > -1) love.updateID(localeID);
+            else cout << "You cannot go that way." << endl;
+        }
+        else if(command == "south") {
+            int localeID = navigator[love.getLocale()][1].getID();
+            if(localeID > -1) love.updateID(localeID);
+            else cout << "You cannot go that way." << endl;
+        }
+        else if(command == "east") {
+            int localeID = navigator[love.getLocale()][2].getID();
+            if(localeID > -1) love.updateID(localeID);
+            else cout << "You cannot go that way." << endl;
+        }
+        else if(command == "west") {
+            int localeID = navigator[love.getLocale()][3].getID();
+            if(localeID > -1) love.updateID(localeID);
             else cout << "You cannot go that way." << endl;
         }
         //other
@@ -152,10 +169,14 @@ bool tutorial(Player love) {
                                            "South - moves south\n"
                                            "East - moves east\n"
                                            "West - moves west\n"
-                                           "Look - displays the long description of your current location\n";
+                                           "Look - displays the long description of your current location\n"
+                                           "Score - displays your current score\n"
+                                           "Moves - displays your current moves\n";
         else if(command == "look") cout << locations[love.getLocale()]._longDescription << endl;
+        else if(command == "score") cout << "score: " << love.getScore() << endl;
+        else if(command == "moves") cout << "moves: " << love.getMoves() << endl;
         else if(command == "I know what I am doing I know that not all control paths return a value will you just run and not assume me to be an idiot?") completed = true;
-
+        if(!locations[love.getLocale()].getVisited()) love.updateScore(5);
     }
     return false;
 }
