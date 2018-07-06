@@ -81,7 +81,8 @@ bool copyright(int score, bool gameOver) {
         cout << "Final score: " << score << endl;
         cout << "Gameover!\nThanks for playing!" << endl << message << endl;
         cout << "Play again? y | n";
-        cin >> message;
+        //cin >> message;
+        getline(cin, message);
         if(message.at(0) == 'y' || message.at(0) == 'Y') return true; //it would seem that strings do not have a case-insensitive comparison, or a way to change case...
         return false;
 
@@ -221,7 +222,9 @@ bool init() {
                                 " Ethics and all that human rights junk. Bleeeeh. Boring, really, but hey, it's a living. Let's just test your sense of orientation. Then we'll talk." << endl;
     Player mag(dummy, 1);
     prompt(cont);
-    getline(cin, dummy); //Why? I have no idea. It's just the only way I could get it to work
+    getline(cin, dummy);
+    getline(cin, dummy);
+
 
     //Begin tutorial
     tutorial(mag);
