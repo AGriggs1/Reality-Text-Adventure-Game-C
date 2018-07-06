@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include "Locale.h"
 #include "Player.h"
 
 //Author: Anthony Griggs
@@ -64,6 +63,7 @@ Locale navigator[50][4] = {
 };
 
 string cont = "continue";
+
 /*
  *
  * UTILITY FUNCTIONS
@@ -116,6 +116,21 @@ void examineLocation(Locale locale) {
 }
 
 /*
+ * compareIgnoreCase
+ * compares two strings to see if they are the same, ignoring case
+ */
+bool compareIgnoreCase(string one, string two) {
+    if(one.length() != two.length()) return false;
+    for(int i = 0; i < one.length(); i++) {
+        char a = one.at(i);
+        char b = two.at(i);
+        a = toupper(a);
+        b = toupper(b);
+        if(a != b) return false;
+    }
+    return true;
+}
+/*
  *
  * GAMEPLAY FUNCTIONS
  *
@@ -139,30 +154,29 @@ bool tutorial(Player love) {
         locations[love.getLocale()].updateVisited();
         //Check what the command was...
         //navigation
-        if(command == "north") {
+        if(compareIgnoreCase(command, "north")) {
             int localeID = navigator[love.getLocale()][0].getID();
             if(localeID > -1) love.updateID(localeID);
             else cout << "You cannot go that way." << endl;
         }
-        else if(command == "south") {
+        else if(compareIgnoreCase(command, "south")) {
             int localeID = navigator[love.getLocale()][1].getID();
             if(localeID > -1) love.updateID(localeID);
             else cout << "You cannot go that way." << endl;
         }
-        else if(command == "east") {
+        else if(compareIgnoreCase(command, "east")) {
             int localeID = navigator[love.getLocale()][2].getID();
             if(localeID > -1) love.updateID(localeID);
             else cout << "You cannot go that way." << endl;
         }
-        else if(command == "west") {
+        else if(compareIgnoreCase(command, "west")) {
             int localeID = navigator[love.getLocale()][3].getID();
             if(localeID > -1) love.updateID(localeID);
             else cout << "You cannot go that way." << endl;
         }
-        //other
-        //TODO: compareIgnoreCase
-        else if(command == "quit") return true;
-        else if(command == "help") cout << "List of commands:\n"
+        //other commands
+        else if(compareIgnoreCase(command, "quit")) return true;
+        else if(compareIgnoreCase(command, "help")) cout << "List of commands:\n"
                                            "Quit - ends the game\n"
                                            "Help - shows help\n"
                                            "North - moves north\n"
@@ -172,9 +186,9 @@ bool tutorial(Player love) {
                                            "Look - displays the long description of your current location\n"
                                            "Score - displays your current score\n"
                                            "Moves - displays your current moves\n";
-        else if(command == "look") cout << locations[love.getLocale()]._longDescription << endl;
-        else if(command == "score") cout << "score: " << love.getScore() << endl;
-        else if(command == "moves") cout << "moves: " << love.getMoves() << endl;
+        else if(compareIgnoreCase(command, "look")) cout << locations[love.getLocale()]._longDescription << endl;
+        else if(compareIgnoreCase(command, "score")) cout << "score: " << love.getScore() << endl;
+        else if(compareIgnoreCase(command, "moves")) cout << "moves: " << love.getMoves() << endl;
         else if(command == "I know what I am doing I know that not all control paths return a value will you just run and not assume me to be an idiot?") completed = true;
         if(!locations[love.getLocale()].getVisited()) love.updateScore(5);
     }
