@@ -66,7 +66,16 @@ class Locale {
         void printItems() {
             for(int i = 0; i <= _numItems; i++) std::cout << _items[i] << std::endl;
         };
-     //   void reset();
+       void reset() {
+           _longDescription = DESC_LONG;
+           _shortDescription = DESC_SHORT;
+           _examineDescription = DESC_EXAMINE;
+           _visited = false;
+           //So there's no built-in method to clear arrays (doing _items = new string[100] does not work).
+                   //I mean, why would there be?? Jeez
+           for(int i = 0; i < 100; i++) _items[i] = "";
+           for(int i = 0; i < _numItems; i++) _items[i] = ITEMS[i];
+       };
 };
 //I know I can define the methods outside of the class definition, but why?
 #endif //REALITY_LOCALE_H
