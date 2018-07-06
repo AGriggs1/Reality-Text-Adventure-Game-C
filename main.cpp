@@ -132,6 +132,14 @@ bool compareIgnoreCase(string one, string two) {
     return true;
 }
 /*
+ * resetMain
+ * resets locales and the navigation matrix, as well as anything else that may have changed
+ */
+void resetMain() {
+    //TODO: deepcopy function for navigator
+    for(int i = 0; i < 6; i++) locations[i].reset();
+}
+/*
  *
  * GAMEPLAY FUNCTIONS
  *
@@ -190,8 +198,9 @@ bool tutorial(Player love) {
         else if(compareIgnoreCase(command, "look")) cout << locations[love.getLocale()]._longDescription << endl;
         else if(compareIgnoreCase(command, "score")) cout << "score: " << love.getScore() << endl;
         else if(compareIgnoreCase(command, "moves")) cout << "moves: " << love.getMoves() << endl;
-        else if(command == "I know what I am doing I know that not all control paths return a value will you just run and not assume me to be an idiot?") completed = true;
+        else cout << "That is not a valid command." << endl;
         if(!locations[love.getLocale()].getVisited()) love.updateScore(5);
+        if(locations[2].getVisited() && locations[3].getVisited() &&  locations[4].getVisited() && locations[5].getVisited()) completed = true;
     }
     return false;
 }
@@ -228,12 +237,13 @@ bool init() {
 
     //Begin tutorial
     tutorial(mag);
+    cout << "???: Excellent." << endl;
     return copyright(mag.getScore(), true);
 
 }
 
 int main() {
-    while(init());
+    while(init()) resetMain();
     return 0;
 }
 bool dumm = copyright(0, false);
