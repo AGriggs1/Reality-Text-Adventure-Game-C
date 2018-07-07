@@ -250,10 +250,11 @@ bool init() {
         for(int i = 0; i < 100; i++) cout << "Ex002334" << i << " CRITICAL: Bx106001-c IV h#s @eC$trrr an iS*&e @0mpr%S$sG &Eof-Sufficient 0$per@tions!" << endl;
         cout << "Baby: Sorry about that. Had a little hiccup! Where were we? Oh yeah! We were going to begin the simulation! That's right!" << endl;
         prompt(" protest");
+        getline(cin, dummy);
+        getline(cin, dummy);
         cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's whay you want, right? You want out. You'll get your out, if you pass!\n"
                 "\nLooks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
-        getline(cin, dummy);
-        getline(cin, dummy);
+        
     }
     return copyright(mag.getScore(), true);
 
