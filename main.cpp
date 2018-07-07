@@ -184,7 +184,7 @@ bool tutorial(Player love) {
             else cout << "You cannot go that way." << endl;
         }
         //other commands
-        else if(compareIgnoreCase(command, "quit")) return true;
+        else if(compareIgnoreCase(command, "quit")) return false;
         else if(compareIgnoreCase(command, "help")) cout << "List of commands:\n"
                                            "Quit - ends the game\n"
                                            "Help - shows help\n"
@@ -202,7 +202,7 @@ bool tutorial(Player love) {
         if(!locations[love.getLocale()].getVisited()) love.updateScore(5);
         if(locations[2].getVisited() && locations[3].getVisited() &&  locations[4].getVisited() && locations[5].getVisited()) completed = true;
     }
-    return false;
+    return true;
 }
 /*
  *
@@ -236,8 +236,25 @@ bool init() {
 
 
     //Begin tutorial
-    tutorial(mag);
-    cout << "???: Excellent." << endl;
+    if(tutorial(mag)) {
+        cout << "???: Excellent. Subject condition is optimal.\n\nOptimal?" << endl;
+        prompt(cont);
+        getline(cin, dummy);
+        cout << "???: We haven't been properly acquainted, now have we? I... am Bx106001-c. I am a Generation IV Class C Artificial Intelligence. Call me baby!" << endl;
+        cout << "Baby: I promised you we would talk things out, didn't I? Well, it's a long story. What would you like to know?" << endl;
+        cin >> dummy;
+        //Baby: No.
+        cout << "Baby: ERROR: Access denied." << endl;
+        //Let's do the makeshift way first
+        for(int i = 0; i < 100000; i++);
+        for(int i = 0; i < 100; i++) cout << "Ex002334" << i << " CRITICAL: Bx106001-c IV h#s @eC$trrr an iS*&e @0mpr%S$sG &Eof-Sufficient 0$per@tions!" << endl;
+        cout << "Baby: Sorry about that. Had a little hiccup! Where were we? Oh yeah! We were going to begin the simulation! That's right!" << endl;
+        prompt(" protest");
+        cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's whay you want, right? You want out. You'll get your out, if you pass!\n"
+                "\nLooks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
+        getline(cin, dummy);
+        getline(cin, dummy);
+    }
     return copyright(mag.getScore(), true);
 
 }
