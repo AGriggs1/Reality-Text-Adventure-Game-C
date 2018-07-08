@@ -78,11 +78,12 @@ string cont = "continue";
 bool copyright(int score, bool gameOver) {
     string message = "Copyright Anthony Griggs, Anthony.Griggs1@marist.edu";
     if(gameOver) {
+        string dummy; //So the program doesn't crash if you don't enter anything
         cout << "Final score: " << score << endl;
         cout << "Gameover!\nThanks for playing!" << endl << message << endl;
         cout << "Play again? y | n";
-        //cin >> message;
-        getline(cin, message);
+        cin >> message;
+        getline(cin, dummy);
         if(message.at(0) == 'y' || message.at(0) == 'Y') return true; //it would seem that strings do not have a case-insensitive comparison, or a way to change case...
         return false;
 
@@ -249,12 +250,12 @@ bool init() {
         for(int i = 0; i < 100000; i++);
         for(int i = 0; i < 100; i++) cout << "Ex002334" << i << " CRITICAL: Bx106001-c IV h#s @eC$trrr an iS*&e @0mpr%S$sG &Eof-Sufficient 0$per@tions!" << endl;
         cout << "Baby: Sorry about that. Had a little hiccup! Where were we? Oh yeah! We were going to begin the simulation! That's right!" << endl;
-        prompt(" protest");
+        prompt("protest");
         getline(cin, dummy);
         getline(cin, dummy);
-        cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's whay you want, right? You want out. You'll get your out, if you pass!\n"
-                "\nLooks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
-        
+        cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's what you want, right? You want out. You'll get your out, if you pass!\n"
+                "\nFreedom? Are you... a captive? Looks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
+
     }
     return copyright(mag.getScore(), true);
 
