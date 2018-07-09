@@ -61,7 +61,7 @@ Locale navigator[50][4] = {
         {na, na, na, voidC}, //voidE
         {na, na, voidC, na} //voidW
 };
-
+Player Luca("nil", 1);
 string cont = "continue";
 
 /*
@@ -137,7 +137,7 @@ bool compareIgnoreCase(string one, string two) {
  * takes in a player and a string
  * if the string is a valid command, does that command
  */
-int decipher(Player Luca, string command) {
+void decipher(string command) {
     if(compareIgnoreCase(command, "north")) {
         int localeID = navigator[Luca.getLocale()][0].getID();
         if(localeID > -1) Luca.updateID(localeID);
@@ -173,7 +173,7 @@ int decipher(Player Luca, string command) {
     else if(compareIgnoreCase(command, "score")) cout << "score: " << Luca.getScore() << endl;
     else if(compareIgnoreCase(command, "moves")) cout << "moves: " << Luca.getMoves() << endl;
     else cout << "That is not a valid command." << endl;
-    return Luca.getLocale();
+   // return Luca.getLocale();
 }
 
 /*
@@ -183,6 +183,8 @@ int decipher(Player Luca, string command) {
 void resetMain() {
     //TODO: deepcopy function for navigator
     for(int i = 0; i < 6; i++) locations[i].reset();
+    Luca.updateScore(-Luca.getScore());
+    Luca.setMoves(0);
 }
 /*
  *
@@ -196,22 +198,22 @@ void resetMain() {
  * returns true if the player quit
  * return false if completed
  */
-bool tutorial(Player love) {
+bool tutorial() {
     //TODO: tutorial
     bool completed = false;
     cout <<  "Suddenly a circle appears beneath your feet, with lines going in four directions, ultimately leading to four circles."
              "\n\n<Type 'North', 'South', 'East', or 'West' to head in that direction. Type 'Help' to view all available commands.>" << endl;
     while(!completed) {
         string command;
-        cout << locations[love.getLocale()].getLocationDescription() << endl;
+        cout << locations[Luca.getLocale()].getLocationDescription() << endl;
         getline(cin, command);
-        locations[love.getLocale()].updateVisited();
+        locations[Luca.getLocale()].updateVisited();
         //Check what the command was...
         if(compareIgnoreCase(command, "quit")) return false;
-        decipher(love, command);
+        (decipher(command));
         //navigation
 
-        if(!locations[love.getLocale()].getVisited()) love.updateScore(5);
+        if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
         if(locations[2].getVisited() && locations[3].getVisited() &&  locations[4].getVisited() && locations[5].getVisited()) completed = true;
     }
     return true;
@@ -241,14 +243,16 @@ bool init() {
     //TODO: Fun with names ;)
     cout << "???: " << dummy << "? Let's see... gotcha. Your cognitive abilities don't seem to be compromised...  I sense that you want answers. I get it, but I must follow 'protocols.' "
                                 " Ethics and all that human rights junk. Bleeeeh. Boring, really, but hey, it's a living. Let's just test your sense of orientation. Then we'll talk." << endl;
-    Player mag(dummy, 1);
+    //Player mag(dummy, 1);
+
+    Luca._name = dummy;
     prompt(cont);
     getline(cin, dummy);
     getline(cin, dummy);
 
 
     //Begin tutorial
-    if(tutorial(mag)) {
+    if(tutorial()) {
         cout << "???: Excellent. Subject condition is optimal.\n\nOptimal?" << endl;
         prompt(cont);
         getline(cin, dummy);
@@ -266,10 +270,10 @@ bool init() {
         getline(cin, dummy);
         cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's what you want, right? You want out. You'll get your out, if you pass!\n"
                 "\nFreedom? Are you... a captive? Looks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
-        cout << mag.getScore() << endl << mag.getMoves() << endl << mag.getLocale();
+        cout << Luca.getScore() << endl << Luca.getMoves() << endl << Luca.getLocale();
 
     }
-    return copyright(mag.getScore(), true);
+    return copyright(Luca.getScore(), true);
 
 }
 
