@@ -37,7 +37,18 @@ Locale voidE(4, items, "You follow the line leading East, stopping at the circle
 Locale voidW(5, items, "You head West, coming to a circle with the letter 'W' on it. The area transforms,"
                                     " and now you are in an office. Desks overflowing with paperwork and the inescapable stench of stale cofee makes you feel anxious.",
                           "You are at the office", examineDesc);
-
+Locale closet(6, items, "The void transforms completely, transforms... into a broom closet. Huh.", "You return to the broom closet.", "Nothing but useless junk.");
+Locale hallway1(7, items, "You enter a hallway and come to a corner", "You are at a hallway corner.", examineDesc);
+Locale officeNW(8, items, "You enter one of the office corners.", "You are in the Northwest corner of the office.", "The place is a mess. Papers and various other supplies litter the floor.");
+Locale officeW(9, items, "You come to a room and nothing but cubicles. So you're in an office, then.", "You are in the office", "Cubicles, cubicles, cubicles.");
+Locale officeSW(10, items, "You enter one of the office corners, which has a particularly large ficus. You study it with intensity.", "You are in the Southwest corner of the office.", "What. A. Ficus.");
+Locale officeN(11, items, "You enter a cublicle that is larger than the rest. It looks it supposed to fit four, maybe five people. The thought makes you claustrophobic.", "You enter the large cubicle.", examineDesc);
+Locale officeC(12, items, "You enter the center of the office. The center of the universe.", "You are in the center of the office.", examineDesc);
+Locale officeS(13, items, "You find a pair of doors. What lies beyond them?", "You head towards the double doors.", "The doors won't budge. Looks like you need a key.");
+Locale officeNE(14, items, "You enter one of the office corners. There is a watercooler, but its empty.", "You are in the Northeast corner of the office.", "Could really use some water... ugh.");
+Locale officeE(15, items, "You are now on the other side of the office. Something feels off, or maybe you're just sick of this place.", "You are in the office", examineDesc);
+Locale officeSE(16, items, "You enter one of the office corners, and are met with a portrait of a sad clown. Pardon?", "You are in the Southeast corner of the office", "The nameplate reads: 'Chairman Bozo, may he grace you with his gaze. Yeah, moving on...");
+Locale hallway2(17, items, "You walk down a hallway, and come to a corner.", "You are at a hallway corner.", examineDesc);
 
 
 
@@ -49,18 +60,35 @@ Locale voidW(5, items, "You head West, coming to a circle with the letter 'W' on
 //Create an array to act as a dictionary for the locales
 Locale na(-1, items, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
 //Also NULL doesn't work either because why would it?
-Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW};
+Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW,
+                        closet, hallway1, officeNW, officeW, officeSW,
+                        officeN, officeC, officeS, officeNE, officeE,
+                        officeSE, hallway2};
 //NavMat
         //navigator[localeID][iDirection] = Locale
                 //0 = North, 1 = South, 2 = East, 3 = West
-Locale navigator[50][4] = {
-        {na, na, na, na},
-        {voidN, voidS, voidE, voidW}, //voidC
-        {na, voidC, na, na}, //voidN
-        {voidC, na, na, na}, //voidS
-        {na, na, na, voidC}, //voidE
-        {na, na, voidC, na} //voidW
+Locale navigator[50][6] = {
+        {na, na, na, na, na, na},
+        {voidN, voidS, voidE, voidW}, //------------------voidC
+        {na, voidC, na, na}, //---------------------------voidN
+        {voidC, na, na, na}, //---------------------------voidS
+        {na, na, na, voidC}, //---------------------------voidE
+        {na, na, voidC, na}, //---------------------------voidW
+
+        {hallway1, na, na, na}, //------------------------closet
+        {na, closet, officeW, na}, //---------------------hallway1
+        {na, officeW, officeN, na}, //--------------------officeNW
+        {officeNW, officeSW, officeC, hallway1}, //-------officeW
+        {officeW, na, officeS, na}, //--------------------officeSW
+        {na, officeC, na, officeNW}, //-------------------officeN
+        {officeN, officeS, officeE, officeS}, //----------officeC
+        {officeC, na, officeSE, officeSW}, //-------------officeS
+        {na, officeE, na, na}, //-------------------------officeNE
+        {officeNE, officeSE, hallway2, officeC}, //-------officeE
+        {officeE, na, na, officeS}, //--------------------officeSE
+        {na, na, na, officeE} //--------------------------hallway2
 };
+
 Player Luca("nil", 1);
 string cont = "continue";
 
@@ -170,6 +198,7 @@ void decipher(string command) {
                                                         "Score - displays your current score\n"
                                                         "Moves - displays your current moves\n";
     else if(compareIgnoreCase(command, "look")) cout << locations[Luca.getLocale()]._longDescription << endl;
+    else if(compareIgnoreCase(command, "examine")) cout << locations[Luca.getLocale()]._examineDescription << endl;
     else if(compareIgnoreCase(command, "score")) cout << "score: " << Luca.getScore() << endl;
     else if(compareIgnoreCase(command, "moves")) cout << "moves: " << Luca.getMoves() << endl;
     else cout << "That is not a valid command." << endl;
@@ -199,7 +228,6 @@ void resetMain() {
  * return false if completed
  */
 bool tutorial() {
-    //TODO: tutorial
     bool completed = false;
     cout <<  "Suddenly a circle appears beneath your feet, with lines going in four directions, ultimately leading to four circles."
              "\n\n<Type 'North', 'South', 'East', or 'West' to head in that direction. Type 'Help' to view all available commands.>" << endl;
@@ -210,13 +238,25 @@ bool tutorial() {
         locations[Luca.getLocale()].updateVisited();
         //Check what the command was...
         if(compareIgnoreCase(command, "quit")) return false;
-        (decipher(command));
-        //navigation
+        decipher(command);
 
         if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
         if(locations[2].getVisited() && locations[3].getVisited() &&  locations[4].getVisited() && locations[5].getVisited()) completed = true;
     }
     return true;
+}
+bool game() {
+    bool completed = false;
+    while(!completed) {
+        string command;
+        cout << locations[Luca.getLocale()].getLocationDescription() << endl;
+        getline(cin, command);
+        locations[Luca.getLocale()].updateVisited();
+        if(compareIgnoreCase(command, "quit")) return false;
+        decipher(command);
+        if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
+        if(command == "No Luca no") completed = true; //Placeholder. Also reference ftw
+    }
 }
 /*
  *
@@ -270,8 +310,14 @@ bool init() {
         getline(cin, dummy);
         cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's what you want, right? You want out. You'll get your out, if you pass!\n"
                 "\nFreedom? Are you... a captive? Looks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
-        cout << Luca.getScore() << endl << Luca.getMoves() << endl << Luca.getLocale();
-
+        prompt(cont);
+        getline(cin, dummy);
+        cout << "Baby: Enough talk. Humans bore me." << endl;
+        prompt("begin");
+        getline(cin, dummy);
+        Luca.updateID(6);
+        Luca.setMoves(0);
+        game();
     }
     return copyright(Luca.getScore(), true);
 
