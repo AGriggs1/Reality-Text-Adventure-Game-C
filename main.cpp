@@ -133,6 +133,50 @@ bool compareIgnoreCase(string one, string two) {
     return true;
 }
 /*
+ * decipher
+ * takes in a player and a string
+ * if the string is a valid command, does that command
+ */
+int decipher(Player Luca, string command) {
+    if(compareIgnoreCase(command, "north")) {
+        int localeID = navigator[Luca.getLocale()][0].getID();
+        if(localeID > -1) Luca.updateID(localeID);
+        else cout << "You cannot go that way." << endl;
+    }
+    else if(compareIgnoreCase(command, "south")) {
+        int localeID = navigator[Luca.getLocale()][1].getID();
+        if(localeID > -1) Luca.updateID(localeID);
+        else cout << "You cannot go that way." << endl;
+    }
+    else if(compareIgnoreCase(command, "east")) {
+        int localeID = navigator[Luca.getLocale()][2].getID();
+        if(localeID > -1) Luca.updateID(localeID);
+        else cout << "You cannot go that way." << endl;
+    }
+    else if(compareIgnoreCase(command, "west")) {
+        int localeID = navigator[Luca.getLocale()][3].getID();
+        if(localeID > -1) Luca.updateID(localeID);
+        else cout << "You cannot go that way." << endl;
+    }
+        //other commands
+    else if(compareIgnoreCase(command, "help")) cout << "List of commands:\n"
+                                                        "Quit - ends the game\n"
+                                                        "Help - shows help\n"
+                                                        "North - moves north\n"
+                                                        "South - moves south\n"
+                                                        "East - moves east\n"
+                                                        "West - moves west\n"
+                                                        "Look - displays the long description of your current location\n"
+                                                        "Score - displays your current score\n"
+                                                        "Moves - displays your current moves\n";
+    else if(compareIgnoreCase(command, "look")) cout << locations[Luca.getLocale()]._longDescription << endl;
+    else if(compareIgnoreCase(command, "score")) cout << "score: " << Luca.getScore() << endl;
+    else if(compareIgnoreCase(command, "moves")) cout << "moves: " << Luca.getMoves() << endl;
+    else cout << "That is not a valid command." << endl;
+    return Luca.getLocale();
+}
+
+/*
  * resetMain
  * resets locales and the navigation matrix, as well as anything else that may have changed
  */
@@ -163,43 +207,10 @@ bool tutorial(Player love) {
         getline(cin, command);
         locations[love.getLocale()].updateVisited();
         //Check what the command was...
+        if(compareIgnoreCase(command, "quit")) return false;
+        decipher(love, command);
         //navigation
-        if(compareIgnoreCase(command, "north")) {
-            int localeID = navigator[love.getLocale()][0].getID();
-            if(localeID > -1) love.updateID(localeID);
-            else cout << "You cannot go that way." << endl;
-        }
-        else if(compareIgnoreCase(command, "south")) {
-            int localeID = navigator[love.getLocale()][1].getID();
-            if(localeID > -1) love.updateID(localeID);
-            else cout << "You cannot go that way." << endl;
-        }
-        else if(compareIgnoreCase(command, "east")) {
-            int localeID = navigator[love.getLocale()][2].getID();
-            if(localeID > -1) love.updateID(localeID);
-            else cout << "You cannot go that way." << endl;
-        }
-        else if(compareIgnoreCase(command, "west")) {
-            int localeID = navigator[love.getLocale()][3].getID();
-            if(localeID > -1) love.updateID(localeID);
-            else cout << "You cannot go that way." << endl;
-        }
-        //other commands
-        else if(compareIgnoreCase(command, "quit")) return false;
-        else if(compareIgnoreCase(command, "help")) cout << "List of commands:\n"
-                                           "Quit - ends the game\n"
-                                           "Help - shows help\n"
-                                           "North - moves north\n"
-                                           "South - moves south\n"
-                                           "East - moves east\n"
-                                           "West - moves west\n"
-                                           "Look - displays the long description of your current location\n"
-                                           "Score - displays your current score\n"
-                                           "Moves - displays your current moves\n";
-        else if(compareIgnoreCase(command, "look")) cout << locations[love.getLocale()]._longDescription << endl;
-        else if(compareIgnoreCase(command, "score")) cout << "score: " << love.getScore() << endl;
-        else if(compareIgnoreCase(command, "moves")) cout << "moves: " << love.getMoves() << endl;
-        else cout << "That is not a valid command." << endl;
+
         if(!locations[love.getLocale()].getVisited()) love.updateScore(5);
         if(locations[2].getVisited() && locations[3].getVisited() &&  locations[4].getVisited() && locations[5].getVisited()) completed = true;
     }
@@ -255,6 +266,7 @@ bool init() {
         getline(cin, dummy);
         cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's what you want, right? You want out. You'll get your out, if you pass!\n"
                 "\nFreedom? Are you... a captive? Looks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
+        cout << mag.getScore() << endl << mag.getMoves() << endl << mag.getLocale();
 
     }
     return copyright(mag.getScore(), true);
