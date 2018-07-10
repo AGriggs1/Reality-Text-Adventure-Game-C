@@ -26,6 +26,8 @@ class Locale {
             _ID = -1;
             _longDescription = "This location has not been initiated, is this therefore nil. For real this time.";
             _shortDescription = "nil";
+            _examineDescription = "nil";
+
             _visited = false;
             //Don't worry about copying, as this should never actully be used once it's complete
         }
@@ -53,6 +55,8 @@ class Locale {
             return _longDescription;
         }
         int getID() {return _ID;}
+
+        bool getVisited() {return _visited;}
       //  int getItemByIndex(std::string item)
         //setters
         //other
@@ -64,6 +68,16 @@ class Locale {
         void printItems() {
             for(int i = 0; i <= _numItems; i++) std::cout << _items[i] << std::endl;
         };
+       void reset() {
+           _longDescription = DESC_LONG;
+           _shortDescription = DESC_SHORT;
+           _examineDescription = DESC_EXAMINE;
+           _visited = false;
+           //So there's no built-in method to clear arrays (doing _items = new string[100] does not work).
+                   //I mean, why would there be?? Jeez
+           for(int i = 0; i < 100; i++) _items[i] = "";
+           for(int i = 0; i < _numItems; i++) _items[i] = ITEMS[i];
+       };
      //   void reset();
 };
 //I know I can define the methods outside of the class definition, but why?

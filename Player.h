@@ -34,6 +34,7 @@ class Player {
             _currentLocaleID = newLocaleID;
             _moves++;
             }
+        void setMoves(int moves) {_moves = moves;}
        // void SetScore(int score) {_score = score;}
         void updateScore(int score) {_score += score;} //This seems more pratical
         //TODO: AddItem, RemoveItem, PrintInventory
