@@ -235,7 +235,6 @@ void decipher(string command) {
  * resets locales and the navigation matrix, as well as anything else that may have changed
  */
 void resetMain() {
-    //TODO: deepcopy function for navigator
     copyNav(true);
     for(int i = 0; i < 6; i++) locations[i].reset();
     Luca.updateID(1);
@@ -384,4 +383,3 @@ int main() {
     while(init()) resetMain();
     return 0;
 }
-bool dumm = copyright(0, false);
