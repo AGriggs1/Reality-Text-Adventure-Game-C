@@ -81,7 +81,7 @@ Locale navigator[50][6] = {
         {officeNW, officeSW, officeC, hallway1}, //-------officeW
         {officeW, na, officeS, na}, //--------------------officeSW
         {na, officeC, na, officeNW}, //-------------------officeN
-        {officeN, officeS, officeE, officeS}, //----------officeC
+        {officeN, officeS, officeE, officeW}, //----------officeC
         {officeC, na, officeSE, officeSW}, //-------------officeS
         {na, officeE, na, na}, //-------------------------officeNE
         {officeNE, officeSE, hallway2, officeC}, //-------officeE
@@ -97,7 +97,32 @@ string cont = "continue";
  * UTILITY FUNCTIONS
  *
  */
-//
+Locale NAVMAT[50][6];
+/*
+ * copyNav
+ * used for creating a copy of the navigation matrix specifically
+ *
+ */
+void copyNav(bool reverse) {
+    for(int i = 0; i < 50; i ++) {
+        if(reverse){
+            navigator[i][0] = NAVMAT[i][0];
+            navigator[i][1] = NAVMAT[i][1];
+            navigator[i][2] = NAVMAT[i][2];
+            navigator[i][3] = NAVMAT[i][3];
+            navigator[i][4] = NAVMAT[i][4];
+            navigator[i][5] = NAVMAT[i][5];
+        }
+        else {
+            NAVMAT[i][0] = navigator[i][0];
+            NAVMAT[i][1] = navigator[i][1];
+            NAVMAT[i][2] = navigator[i][2];
+            NAVMAT[i][3] = navigator[i][3];
+            NAVMAT[i][4] = navigator[i][4];
+            NAVMAT[i][5] = navigator[i][5];
+        }
+    }
+}
 /*
  * copyright
  * Accepts an int and a boolean
@@ -211,9 +236,28 @@ void decipher(string command) {
  */
 void resetMain() {
     //TODO: deepcopy function for navigator
+    copyNav(true);
     for(int i = 0; i < 6; i++) locations[i].reset();
+    Luca.updateID(1);
     Luca.updateScore(-Luca.getScore());
     Luca.setMoves(0);
+}
+/*
+ * switchLocations
+ * Takes two sets of rows and columns for the navigation matrix
+ * Switches the locations at those rows and columns with each other
+ */
+void switchLocations(int r1, int c1, int r2, int c2) {
+    Locale temp = navigator[r1][c1];
+    navigator[r1][c1] = navigator[r2][c2];
+    navigator[r2][c2] = temp;
+}
+/*
+ * replaceLocation
+ * Replaces a Locale at a row and column of the Navigation Maxtrix with another Locale
+ */
+void replaceLocation(int r, int c, Locale cola) {
+    navigator[r][c] = cola;
 }
 /*
  *
@@ -255,6 +299,18 @@ bool game() {
         if(compareIgnoreCase(command, "quit")) return false;
         decipher(command);
         if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
+        if(Luca.getLocale() == officeC.getID()) {
+            //Switch the hallways
+            switchLocations(officeW.getID(), 3, officeE.getID(), 2);
+            //Fix the navigation matrix
+            //Make it so that going west from hallway2 no longer leads to officeW
+            replaceLocation(navigator[officeW.getID()][3].getID(), 3, na);
+            //Make it so that going east from hallway2 now leads to officeW
+            replaceLocation(navigator[officeW.getID()][3].getID(), 2, officeW);
+            //Vice versa
+            replaceLocation(navigator[officeE.getID()][2].getID(), 2, na);
+            replaceLocation(navigator[officeE.getID()][2].getID(), 3, officeE);
+        }
         if(command == "No Luca no") completed = true; //Placeholder. Also reference ftw
     }
 }
@@ -265,6 +321,7 @@ bool game() {
  */
 bool init() {
     // << is concatenation
+    copyNav(false);
     string dummy;
     cout << endl;
     //Player mag(dummy, 0);
