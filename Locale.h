@@ -32,7 +32,7 @@ class Locale {
         }
 
         //Constructor
-        Locale(int ID, std::string items[], std::string longDescription, std::string shortDescription, std::string examineDescription) {
+        Locale(int ID, std::string longDescription, std::string shortDescription, std::string examineDescription) {
             _ID = ID;
             _longDescription = longDescription;
             _shortDescription = shortDescription;
@@ -42,11 +42,6 @@ class Locale {
             DESC_SHORT = shortDescription;
             DESC_EXAMINE = examineDescription;
             //Doing arr1 = arr2 usually results in arr2 simply referencing arr1 in most languages, and my intuition tells me C++ is the same
-            for (int i = 0; i < 100; i++) {
-                _items[i] = items[i];
-                ITEMS[i] = items[i];
-                if(items[i] != "") _numItems++; //If the string is blank, it cannot be an item!
-            }
         }
         //getters
         std::string getLocationDescription() {
@@ -95,6 +90,9 @@ class Locale {
            for(int i = 0; i < 100; i++) _items[i] = "";
            for(int i = 0; i < _numItems; i++) _items[i] = ITEMS[i];
        }
+       void copyItems() {
+           for (int i = 0; i < 100; i++)  ITEMS[i] = _items[i];
+        }
 };
 //I know I can define the methods outside of the class definition, but why?
 #endif //REALITY_LOCALE_H
