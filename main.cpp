@@ -13,43 +13,50 @@ using namespace std; //used so we don't have to type std::cout
 /*
  * Define Locales
  */
+                //It would seem that it is only possible to pass empty strings to an object, making passing them at all pointless
+                // We'll to do it manually.
+                // Story of my life.                                                                                                                                                                        string blockN = "N-block";
+string blockS = "S-block";
+string blockE = "E-block";
+string blockW = "W-block";
 string longDesc = "You find yourself in an empty, white space. A void. How? Why? Where? Who? Many thoughts race through your head, with no definitive answer manifesting...";
-string examineDesc = "You see nothing of use.";
+string examineDesc = "";
 string items[100];
-Locale voidDummy(0, items, longDesc, "NULL", "NULL");
-Locale voidC(1, items, "You are in the center circle. So. Where to first?", "You are standing on the center circle.", examineDesc);
+Locale voidDummy(0, longDesc, "NULL", "NULL");
+Locale voidC(1, "You are in the center circle. So. Where to first?", "You are standing on the center circle.", examineDesc);
 
-Locale voidN(2, items, "You follow the line North. Once you reach the circle, you notice it has the letter 'N' on it. "
+
+Locale voidN(2, "You follow the line North. Once you reach the circle, you notice it has the letter 'N' on it. "
                        "The void transforms into a lush forest teeming with pine trees. You hear the wind breeze through the trees, "
                        "the songs of birds and feel welcome.", "You are at the forest", examineDesc);
 
-Locale voidS(3, items, "You follow one of the lines to a circle that has the letter 'S' on it. "
+Locale voidS(3, "You follow one of the lines to a circle that has the letter 'S' on it. "
                        "The area around transforms. Now you at the edge of a cliff overlooking the open sea. You hear the waves crashing "
                        "against the crags below, which resemble hungry teeth tearing into the vast watters, eager to do the same to you. You feel a sense of somberness.",
                        "You're at the cliffside", examineDesc);
 
-Locale voidE(4, items, "You follow the line leading East, stopping at the circle with the letter 'E' on it. "
+Locale voidE(4, "You follow the line leading East, stopping at the circle with the letter 'E' on it. "
                        "The area transforms into the ruins of city. Cars rusted, buildings overgrown with moss and vines. Nature has reclaimed what it once lost."
                        " You can't help but feel curious about the fate of this place.", "You are at the city ruins.", examineDesc);
 
-Locale voidW(5, items, "You head West, coming to a circle with the letter 'W' on it. The area transforms,"
+Locale voidW(5, "You head West, coming to a circle with the letter 'W' on it. The area transforms,"
                                     " and now you are in an office. Desks overflowing with paperwork and the inescapable stench of stale cofee makes you feel anxious.",
                           "You are at the office", examineDesc);
-Locale closet(6, items, "The void transforms completely, transforms... into a broom closet. Huh.", "You return to the broom closet.", "Nothing but useless junk.");
-Locale hallway1(7, items, "You enter a hallway and come to a corner", "You are at a hallway corner.", examineDesc);
-Locale officeNW(8, items, "You enter one of the office corners.", "You are in the Northwest corner of the office.", "The place is a mess. Papers and various other supplies litter the floor.");
-Locale officeW(9, items, "You come to a room and nothing but cubicles. So you're in an office, then.", "You are in the office", "Cubicles, cubicles, cubicles.");
-Locale officeSW(10, items, "You enter one of the office corners, which has a particularly large ficus. You study it with intensity.", "You are in the Southwest corner of the office.", "What. A. Ficus.");
-Locale officeN(11, items, "You enter a cublicle that is larger than the rest. It looks it supposed to fit four, maybe five people. The thought makes you claustrophobic.", "You enter the large cubicle.", examineDesc);
-Locale officeC(12, items, "You enter the center of the office. The center of the universe.", "You are in the center of the office.", examineDesc);
-Locale officeS(13, items, "You find a pair of doors. What lies beyond them?", "You head towards the double doors.", "The doors won't budge. Looks like you need a key.");
-Locale officeNE(14, items, "You enter one of the office corners. There is a watercooler, but its empty.", "You are in the Northeast corner of the office.", "Could really use some water... ugh.");
-Locale officeE(15, items, "You are now on the other side of the office. Something feels off, or maybe you're just sick of this place.", "You are in the office", examineDesc);
-Locale officeSE(16, items, "You enter one of the office corners, and are met with a portrait of a sad clown. Pardon?", "You are in the Southeast corner of the office", "The nameplate reads: 'Chairman Bozo, may he grace you with his gaze. Yeah, moving on...");
-Locale hallway2(17, items, "You walk down a hallway, and come to a corner.", "You are at a hallway corner.", examineDesc);
+Locale closet(6, "The void transforms completely, transforms... into a broom closet. Huh.", "You return to the broom closet.", "Nothing but useless junk.");
+Locale hallway1(7, "You enter a hallway and come to a corner", "You are at a hallway corner.", examineDesc);
+Locale officeNW(8, "You enter one of the office corners.", "You are in the Northwest corner of the office.", "The place is a mess. Papers and various other supplies litter the floor.");
+Locale officeW(9, "You come to a room and nothing but cubicles. So you're in an office, then.", "You are in the office", "Cubicles, cubicles, cubicles.");
+Locale officeSW(10, "You enter one of the office corners, which has a particularly large ficus. You study it with intensity.", "You are in the Southwest corner of the office.", "What. A. Ficus.");
+Locale officeN(11, "You enter a cublicle that is larger than the rest. It looks it supposed to fit four, maybe five people. The thought makes you claustrophobic.", "You enter the large cubicle.", examineDesc);
+Locale officeC(12, "You enter the center of the office. The center of the universe.", "You are in the center of the office.", examineDesc);
+Locale officeS(13, "You find a pair of doors. What lies beyond them?", "You head towards the double doors.", "The doors won't budge. Looks like you need a key.");
+Locale officeNE(14, "You enter one of the office corners. There is a watercooler, but its empty.", "You are in the Northeast corner of the office.", "Could really use some water... ugh.");
+Locale officeE(15, "You are now on the other side of the office. Something feels off, or maybe you're just sick of this place.", "You are in the office", examineDesc);
+Locale officeSE(16, "You enter one of the office corners, and are met with a portrait of a sad clown. Pardon?", "You are in the Southeast corner of the office", "The nameplate reads: 'Chairman Bozo, may he grace you with his gaze. Yeah, moving on...");
+Locale hallway2(17, "You walk down a hallway, and come to a corner.", "You are at a hallway corner.", examineDesc);
 
 //Create an array to act as a dictionary for the locales
-Locale na(-1, items, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
+Locale na(-1, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
 //Also NULL doesn't work either because why would it?
 Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW,
                         closet, hallway1, officeNW, officeW, officeSW,
@@ -79,6 +86,7 @@ Locale navigator[50][6] = {
         {officeE, na, na, officeS}, //--------------------officeSE
         {na, na, na, officeE} //--------------------------hallway2
 };
+//Define Items
 
 Player Luca("nil", 1);
 string cont = "continue";
@@ -155,10 +163,10 @@ bool compareLocations(Locale one, Locale two) {
  * examineLocation
  * prints the examine results at that location, as well as any item that may be there
  */
-void examineLocation(Locale locale) {
-    cout << locale._examineDescription << endl;
+void examineLocation(int ID) {
+    cout << locations[ID]._examineDescription << endl;
     cout << "You see a/an: " << endl;
-    locale.printItems();
+    locations[ID].printItems();
 }
 
 /*
@@ -223,7 +231,7 @@ void decipher(string command) {
                                                         "Score - displays your current score\n"
                                                         "Moves - displays your current moves\n";
     else if(compareIgnoreCase(command, "look")) cout << locations[Luca.getLocale()]._longDescription << endl;
-    else if(compareIgnoreCase(command, "examine")) cout << locations[Luca.getLocale()]._examineDescription << endl;
+    else if(compareIgnoreCase(command, "examine")) examineLocation(Luca.getLocale());
     else if(compareIgnoreCase(command, "score")) cout << "score: " << Luca.getScore() << endl;
     else if(compareIgnoreCase(command, "moves")) cout << "moves: " << Luca.getMoves() << endl;
     else cout << "That is not a valid command." << endl;
@@ -320,7 +328,17 @@ bool game() {
  */
 bool init() {
     // << is concatenation
-    makeUpper("aYYn");
+    //place items
+    //voidC
+    locations[1].addItem("S-Block");
+    locations[1].addItem("W-Block");
+    locations[1].copyItems();
+    //voidN
+    locations[2].addItem("E-Block");
+    locations[2].copyItems();
+    //voidS
+    locations[3].addItem("N-Block");
+    locations[3].copyItems();
     copyNav(false);
     string dummy;
     cout << endl;
