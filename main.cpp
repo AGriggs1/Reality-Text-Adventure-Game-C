@@ -87,7 +87,7 @@ Locale navigator[50][6] = {
         {na, na, na, officeE} //--------------------------hallway2
 };
 //Define Items
-
+bool canTakeItem[100] = {};
 Player Luca("nil", 1);
 string cont = "continue";
 
@@ -150,7 +150,19 @@ bool copyright(int score, bool gameOver) {
 void prompt(string keyword) {
     cout << "<Press enter to " << keyword << ">";
 }
-
+/*
+ * makeUpper
+ * Takes in a string and converts all characters to be in upppercase
+ */
+string makeUpper(string cappy) {
+    string CAPPY;
+    for(int i = 0; i < cappy.length(); i++) {
+        char a = cappy.at(i);
+        a = toupper(a);
+        CAPPY += a;
+    }
+    return CAPPY;
+}
 /*
  * compareLocations
  * compares two passed Locales by their IDS
@@ -163,12 +175,33 @@ bool compareLocations(Locale one, Locale two) {
  * examineLocation
  * prints the examine results at that location, as well as any item that may be there
  */
-void examineLocation(int ID) {
-    cout << locations[ID]._examineDescription << endl;
+void examineLocation(int localeID) {
+    cout << locations[localeID]._examineDescription << endl;
     cout << "You see a/an: " << endl;
-    locations[ID].printItems();
-}
+    locations[localeID].printItems();
+    locations[localeID]._searched = true;
 
+}
+/*
+ * take
+ * takes the item at the given locale, if possible
+ */
+bool take(int localeID, string item) {
+    //First, check if the item is here
+    int index = locations[localeID].getItemByIndex(makeUpper(item));
+    if(index == -1) return false;
+    //Has the player searched the location? If so, they are free to take the item
+    if(locations[localeID]._searched) {
+            Luca.addItem(locations[localeID].removeItem(index));
+            return true;
+    }
+    //otherwise, see if the item was dropped here
+    else if(locations[localeID]._canTake[index]){
+        Luca.addItem(locations[localeID].removeItem(index));
+        return true;
+    }
+    return false;
+}
 /*
  * compareIgnoreCase
  * compares two strings to see if they are the same, ignoring case
@@ -183,15 +216,6 @@ bool compareIgnoreCase(string one, string two) {
         if(a != b) return false;
     }
     return true;
-}
-string makeUpper(string cappy) {
-    string CAPPY;
-    for(int i = 0; i < cappy.length(); i++) {
-        char a = cappy.at(i);
-        a = toupper(a);
-        CAPPY += a;
-    }
-    return CAPPY;
 }
 /*
  * decipher
@@ -218,6 +242,22 @@ void decipher(string command) {
         int localeID = navigator[Luca.getLocale()][3].getID();
         if(localeID > -1) Luca.updateID(localeID);
         else cout << "You cannot go that way." << endl;
+    }
+    //take
+    else if(compareIgnoreCase(command.substr(0, 3), "take")) {
+        //See if this is a two-word command... try to take with what should be the second half...
+        if(locations[Luca.getLocale()]._searched) {
+
+        if(command.length() > 4) {
+            cout << command.substr(4, command.length());
+            if(take(Luca.getLocale(), command.substr(4, command.length()))) cout << "took the " << command.substr(4, command.length());
+            else cout << "Could not find item " << command.substr(4, command.length());
+        }
+        //Otherwise, prompt for what item the player wants
+        else if(locations[Luca.getLoca])
+
+        }
+
     }
         //other commands
     else if(compareIgnoreCase(command, "help")) cout << "List of commands:\n"
@@ -328,16 +368,21 @@ bool game() {
  */
 bool init() {
     // << is concatenation
+    //set all items as untakeable
+    for(int i = 0; i < 20; i++) {
+        canTakeItem[i] = false;
+    }
     //place items
     //voidC
-    locations[1].addItem("S-Block");
-    locations[1].addItem("W-Block");
+            //Lets make items be in upper case to make things easier
+    locations[1].addItem("S-BLOCK", true);
+    locations[1].addItem("W-BLOCK", true);
     locations[1].copyItems();
     //voidN
-    locations[2].addItem("E-Block");
+    locations[2].addItem("E-BLOCK", true);
     locations[2].copyItems();
     //voidS
-    locations[3].addItem("N-Block");
+    locations[3].addItem("N-BLOCK", true);
     locations[3].copyItems();
     copyNav(false);
     string dummy;
