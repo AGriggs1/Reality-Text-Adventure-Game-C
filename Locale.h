@@ -65,7 +65,7 @@ class Locale {
         void removeItem(int indexAt) {
            _items[indexAt] = "";
         }
-        bool addItem(std::string item) {
+        void addItem(std::string item) {
             //First, see if there are any indexes open within the limits of _numItems
             int index = getItemByIndex("");
             if(index > -1) _items[index] = item;
