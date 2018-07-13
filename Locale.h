@@ -148,7 +148,7 @@ class Locale {
            //So there's no built-in method to clear arrays (doing _items = new string[100] does not work).
                    //I mean, why would there be?? Jeez
            for(int i = 0; i < 100; i++) _items[i] = "";
-           for(int i = 0; i < _numItems; i++) _items[i] = ITEMS[i];
+          // for(int i = 0; i < _numItems; i++) _items[i] = ITEMS[i];
        }
        /*
         * copyItems
