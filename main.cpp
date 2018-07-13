@@ -244,14 +244,13 @@ void decipher(string command) {
         else cout << "You cannot go that way." << endl;
     }
     //take
-    else if(compareIgnoreCase(command.substr(0, 3), "take")) {
+    else if(compareIgnoreCase(command.substr(0, 4), "take")) {
         //See if this is a two-word command... try to take with what should be the second half...
 
 
         if(command.length() > 4) {
-            cout << command.substr(4, command.length());
-            if(take(Luca.getLocale(), command.substr(4, command.length()))) cout << "took the " << command.substr(4, command.length());
-            else cout << "Could not find item " << command.substr(4, command.length());
+            if(take(Luca.getLocale(), command.substr(5, command.length()))) cout << "took the " << command.substr(5, command.length()) << endl;
+            else cout << "Could not find item " << command.substr(5, command.length()) << endl;
         }
         //Otherwise, prompt for what item the player wants
         else {
@@ -260,10 +259,10 @@ void decipher(string command) {
             for(int i = 0; i < 30; i++) {
                 if(locations[Luca.getLocale()]._canTake[i] == true) numItems++;
             }
-            if(numItems > 0) {
-                locations[Luca.getLocale()].printItems(true);
+            if(numItems > 0 || locations[Luca.getLocale()]._searched) {
+                locations[Luca.getLocale()].printItems(!locations[Luca.getLocale()]._searched);
                 getline(cin, command);
-                if(take(Luca.getLocale(), command)) cout << "took " << command;
+                if(take(Luca.getLocale(), command)) cout << "took the" << command << endl;
                 else cout << "Could not find " << command;
             }
         }
@@ -278,11 +277,13 @@ void decipher(string command) {
                                                         "West - moves west\n"
                                                         "Look - displays the long description of your current location\n"
                                                         "Score - displays your current score\n"
-                                                        "Moves - displays your current moves\n";
+                                                        "Moves - displays your current moves\n"
+                                                        "Inventory - displays what items you have\n";
     else if(compareIgnoreCase(command, "look")) cout << locations[Luca.getLocale()]._longDescription << endl;
     else if(compareIgnoreCase(command, "examine")) examineLocation(Luca.getLocale());
     else if(compareIgnoreCase(command, "score")) cout << "score: " << Luca.getScore() << endl;
     else if(compareIgnoreCase(command, "moves")) cout << "moves: " << Luca.getMoves() << endl;
+    else if(compareIgnoreCase(command, "inventory")) Luca.printItems();
     else cout << "That is not a valid command." << endl;
    // return Luca.getLocale();
 }
@@ -297,6 +298,7 @@ void resetMain() {
     Luca.updateID(1);
     Luca.updateScore(-Luca.getScore());
     Luca.setMoves(0);
+    Luca.clearInventory();
 }
 /*
  * switchLocations
