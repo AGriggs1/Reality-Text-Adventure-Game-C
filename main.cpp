@@ -40,10 +40,11 @@ Locale voidE(4, "You follow the line leading East, stopping at the circle with t
                        " You can't help but feel curious about the fate of this place.", "You are at the city ruins.", examineDesc);
 
 Locale voidW(5, "You head West, coming to a circle with the letter 'W' on it. The area transforms,"
-                                    " and now you are in an office. Desks overflowing with paperwork and the inescapable stench of stale cofee makes you feel anxious.",
+                                    " and now you are in an office. Desks overflowing with paperwork and the inescapable stench of stale coffee makes you feel anxious.",
                           "You are at the office", examineDesc);
 Locale closet(6, "The void transforms completely, transforms... into a broom closet. Huh.", "You return to the broom closet.", "Nothing but useless junk.");
-Locale hallway1(7, "You enter a hallway and come to a corner", "You are at a hallway corner.", examineDesc);
+Locale hallway1(7, "You enter a hallway and come to a corner", "You are at a hallway corner.", "There is a glass panel on the wall with what looks a map of this place.\n"
+                                                                                               "");
 Locale officeNW(8, "You enter one of the office corners.", "You are in the Northwest corner of the office.", "The place is a mess. Papers and various other supplies litter the floor.");
 Locale officeW(9, "You come to a room and nothing but cubicles. So you're in an office, then.", "You are in the office", "Cubicles, cubicles, cubicles.");
 Locale officeSW(10, "You enter one of the office corners, which has a particularly large ficus. You study it with intensity.", "You are in the Southwest corner of the office.", "What. A. Ficus.");
@@ -55,13 +56,25 @@ Locale officeE(15, "You are now on the other side of the office. Something feels
 Locale officeSE(16, "You enter one of the office corners, and are met with a portrait of a sad clown. Pardon?", "You are in the Southeast corner of the office", "The nameplate reads: 'Chairman Bozo, may he grace you with his gaze. Yeah, moving on...");
 Locale hallway2(17, "You walk down a hallway, and come to a corner.", "You are at a hallway corner.", examineDesc);
 
+Locale forest(18, "You pass through a pair of doors, and well... now you're in a forest. You look behind you, and the building you were just in has completely vanished. Well then.",
+"You are in the forest.", "You can faintly hear what sounds like running water in the distance. A nearby notice board catches your attention. it reads:\n"
+                         "New Pena National Forest\n"
+                         "e             \n"
+                         "|             \n"
+                         "g--f--h--i    \n"
+                         "         |    \n"
+                         "      j--k    \n"
+                         "         |    \n"
+                         "         l--m \n"
+                         "\nExplore one of the many cave systems found within our beautiful forest! See the incantation circles where locals performed their rituals! Book your guided tour now!\n"
+                         "WARNING: Cave spelunking can a dangerous activity, especially for the untrained! DO NOT EXPLORE UNAUTHORIZED AREAS ALONE OR WITHOUT A TRAINED PARK GUIDE!");
 //Create an array to act as a dictionary for the locales
 Locale na(-1, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
 //Also NULL doesn't work either because why would it?
 Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW,
                         closet, hallway1, officeNW, officeW, officeSW,
                         officeN, officeC, officeS, officeNE, officeE,
-                        officeSE, hallway2};
+                        officeSE, hallway2, forest};
 //NavMat
         //navigator[localeID][iDirection] = Locale
                 //0 = North, 1 = South, 2 = East, 3 = West
@@ -84,7 +97,8 @@ Locale navigator[50][6] = {
         {na, officeE, na, na}, //-------------------------officeNE
         {officeNE, officeSE, hallway2, officeC}, //-------officeE
         {officeE, na, na, officeS}, //--------------------officeSE
-        {na, na, na, officeE} //--------------------------hallway2
+        {na, na, na, officeE}, //-------------------------hallway2
+        {na, na, na, na} //-------------------------------forest
 };
 //Define Items
 bool canTakeItem[100] = {};
@@ -203,6 +217,16 @@ bool take(int localeID, string item) {
     return false;
 }
 /*
+ * drop
+ * drops the given item at the given locale, if the player has it
+ */
+bool drop(int localeID, string item) {
+    int index = Luca.getItemByIndex(makeUpper(item));
+    if(index == -1) return false;
+    locations[localeID].addItem(Luca.removeItem(index), false);
+    return true;
+}
+/*
  * compareIgnoreCase
  * compares two strings to see if they are the same, ignoring case
  */
@@ -249,8 +273,9 @@ void decipher(string command) {
 
 
         if(command.length() > 4) {
-            if(take(Luca.getLocale(), command.substr(5, command.length()))) cout << "took the " << command.substr(5, command.length()) << endl;
-            else cout << "Could not find item " << command.substr(5, command.length()) << endl;
+            string item = command.substr(5, command.length());
+            if(take(Luca.getLocale(), item)) cout << "took the " << item << endl;
+            else cout << "Could not find item " << item << endl;
         }
         //Otherwise, prompt for what item the player wants
         else {
@@ -265,6 +290,17 @@ void decipher(string command) {
                 if(take(Luca.getLocale(), command)) cout << "took the" << command << endl;
                 else cout << "Could not find " << command;
             }
+        }
+    }
+    //drop
+    else if(compareIgnoreCase(command.substr(0, 4), "drop")) {
+        if(command.length() > 4) {
+            string item = command.substr(5, command.length());
+            if(drop(Luca.getLocale(), item)) cout << "dropped the " << item << endl;
+            else cout << "You do not have any " << item;
+        }
+        else {
+            cout << "Drop what?\n";
         }
     }
         //other commands
