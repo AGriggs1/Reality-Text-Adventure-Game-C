@@ -21,6 +21,8 @@ class Locale {
         std::string _longDescription;
         std::string _shortDescription;
         std::string _examineDescription;
+        bool _searched;
+        bool _canTake[100];
         //Null constructor
         Locale() {
             _ID = -1;
@@ -38,6 +40,7 @@ class Locale {
             _shortDescription = shortDescription;
             _examineDescription = examineDescription;
             _visited = false;
+            _searched = false;
             DESC_LONG = longDescription;
             DESC_SHORT = shortDescription;
             DESC_EXAMINE = examineDescription;
@@ -65,15 +68,22 @@ class Locale {
         void removeItem(int indexAt) {
            _items[indexAt] = "";
         }
-        void addItem(std::string item) {
+        void addItem(std::string item, bool init) {
             //First, see if there are any indexes open within the limits of _numItems
             int index = getItemByIndex("");
-            if(index > -1) _items[index] = item;
+            if(index > -1) {
+                _items[index] = item;
+                if(init) _canTake[index] = false;
+                else _canTake[index] = true;
+            }
             //Otherwise, put the item at _numItems and increment
             else {
                 _items[_numItems] = item;
                 _numItems++;
+                if(init) _canTake[index] = false;
+                else _canTake[index] = true;
             }
+
         };
         void printItems() {
             for(int i = 0; i <= _numItems; i++) {
@@ -85,6 +95,7 @@ class Locale {
            _shortDescription = DESC_SHORT;
            _examineDescription = DESC_EXAMINE;
            _visited = false;
+           _searched = false;
            //So there's no built-in method to clear arrays (doing _items = new string[100] does not work).
                    //I mean, why would there be?? Jeez
            for(int i = 0; i < 100; i++) _items[i] = "";
