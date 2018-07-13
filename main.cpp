@@ -42,13 +42,29 @@ Locale voidE(4, "You follow the line leading East, stopping at the circle with t
 Locale voidW(5, "You head West, coming to a circle with the letter 'W' on it. The area transforms,"
                                     " and now you are in an office. Desks overflowing with paperwork and the inescapable stench of stale coffee makes you feel anxious.",
                           "You are at the office", examineDesc);
-Locale closet(6, "The void transforms completely, transforms... into a broom closet. Huh.", "You return to the broom closet.", "Nothing but useless junk.");
+Locale closet(6, "The void transforms completely, transforms... into a broom closet. Huh.", "You return to the broom closet.", "You rifle through the shelves");
 Locale hallway1(7, "You enter a hallway and come to a corner", "You are at a hallway corner.", "There is a glass panel on the wall with what looks a map of this place.\n"
-                                                                                               "");
+                                                                                               "   c1--C   c6     \n"
+                                                                                               "   |   |   |      \n"
+                                                                                               "b--c2--c4--c7--d  \n"
+                                                                                               "|  |   |   |   |  \n"
+                                                                                               "a  c3--c5--c8  e  \n"
+                                                                                               "       |          \n"
+                                                                                               "       |          \n"
+                                                                                               "   51--n1--40     \n"
+                                                                                               "     - |  +      \n"
+                                                                                               "   50--n2--48     \n"
+                                                                                               "     + |  -      \n"
+                                                                                               "   45--n3--42     \n"
+                                                                                               "     = |  =      \n"
+                                                                                               "     = 46 =        ");
 Locale officeNW(8, "You enter one of the office corners.", "You are in the Northwest corner of the office.", "The place is a mess. Papers and various other supplies litter the floor.");
 Locale officeW(9, "You come to a room and nothing but cubicles. So you're in an office, then.", "You are in the office", "Cubicles, cubicles, cubicles.");
 Locale officeSW(10, "You enter one of the office corners, which has a particularly large ficus. You study it with intensity.", "You are in the Southwest corner of the office.", "What. A. Ficus.");
-Locale officeN(11, "You enter a cublicle that is larger than the rest. It looks it supposed to fit four, maybe five people. The thought makes you claustrophobic.", "You enter the large cubicle.", examineDesc);
+Locale officeN(11, "You enter a cubicle that is larger than the rest. It looks it supposed to fit four, maybe five people. The thought makes you claustrophobic.", "You enter the large cubicle.", "You try one of the computers."
+                                                                                                                                                                                                   "It boots up to reveal a text document, which reads:\n"
+                                                                                                                                                                                                   "'The running water chases the setting sun. Where they meet,"
+                                                                                                                                                                                                   "reveals the secret of their origin.'");
 Locale officeC(12, "You enter the center of the office. The center of the universe.", "You are in the center of the office.", examineDesc);
 Locale officeS(13, "You find a pair of doors. What lies beyond them?", "You head towards the double doors.", "The doors won't budge. Looks like you need a key.");
 Locale officeNE(14, "You enter one of the office corners. There is a watercooler, but its empty.", "You are in the Northeast corner of the office.", "Could really use some water... ugh.");
@@ -68,13 +84,18 @@ Locale forest(18, "You pass through a pair of doors, and well... now you're in a
                          "         l--m \n"
                          "\nExplore one of the many cave systems found within our beautiful forest! See the incantation circles where locals performed their rituals! Book your guided tour now!\n"
                          "WARNING: Cave spelunking can a dangerous activity, especially for the untrained! DO NOT EXPLORE UNAUTHORIZED AREAS ALONE OR WITHOUT A TRAINED PARK GUIDE!");
+Locale river(19, "You continue down a dirt pathway, coming to a riverbank. You here what sounds like thunder in the distance", "You are at the river", "Just a river.");
+Locale lake(20, "You follow the river, eventually finding yourself at a large lake.", "You are at the lake.", "You walk along the shores, keeping an eye out for any interesting finds.");
+Locale waterfall(21, "You follow the river to a watefall. Looks pretty tall.", "You are at the waterfall.", "You take a look around the area.");
+Locale caveE(22, "You go behind the waterfall, and the find the entrance to a cavern.", "You are behind the waterfall.", "You take a look around.");
 //Create an array to act as a dictionary for the locales
 Locale na(-1, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
 //Also NULL doesn't work either because why would it?
 Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW,
                         closet, hallway1, officeNW, officeW, officeSW,
                         officeN, officeC, officeS, officeNE, officeE,
-                        officeSE, hallway2, forest};
+                        officeSE, hallway2, forest, river, lake, waterfall,
+                        caveE};
 //NavMat
         //navigator[localeID][iDirection] = Locale
                 //0 = North, 1 = South, 2 = East, 3 = West
@@ -98,7 +119,11 @@ Locale navigator[50][6] = {
         {officeNE, officeSE, hallway2, officeC}, //-------officeE
         {officeE, na, na, officeS}, //--------------------officeSE
         {na, na, na, officeE}, //-------------------------hallway2
-        {na, na, na, na} //-------------------------------forest
+        {na, river, na, na}, //---------------------------forest
+        {forest, na, waterfall, lake}, //-----------------river
+        {na, na, river, na}, //---------------------------lake
+        {na, na, na, river}, //---------------------------waterfall
+        {na, na, na, waterfall} //---------------------cavE
 };
 //Define Items
 bool canTakeItem[100] = {};
@@ -379,7 +404,8 @@ bool tutorial() {
         decipher(command);
 
         if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
-        if(locations[2].getVisited() && locations[3].getVisited() &&  locations[4].getVisited() && locations[5].getVisited()) completed = true;
+        //The player must find all blocks and place them in the right location to complete the tutorial
+        if(locations[2].getItemByIndex("N-BLOCK") > -1 && locations[3].getItemByIndex("S-BLOCK") > -1 &&  locations[4].getItemByIndex("E-BLOCK") > -1 && locations[5].getItemByIndex("W-BLOCK") > -1) completed = true;
     }
     return true;
 }
@@ -424,13 +450,23 @@ bool init() {
             //Lets make items be in upper case to make things easier
     locations[1].addItem("S-BLOCK", true);
     locations[1].addItem("W-BLOCK", true);
-    locations[1].copyItems();
     //voidN
     locations[2].addItem("E-BLOCK", true);
-    locations[2].copyItems();
     //voidS
     locations[3].addItem("N-BLOCK", true);
-    locations[3].copyItems();
+    //Closet
+    locations[6].addItem("HAMMER", true);
+    locations[6].addItem("FLASHLIGHT", true);
+    locations[6].addItem("MATCHES", true);
+    //Hallway1
+    locations[7].addItem("MAP", true);
+    //OfficeSW
+    locations[8].addItem("BATTERIES", true);
+    //Forest
+    locations[18].addItem("ROPE", true);
+    //Lake
+    locations[20].addItem("DOLL", true);
+    //There's supposed to be another map item at 18 too, but I'm going to change that here
     copyNav(false);
     string dummy;
     cout << endl;
