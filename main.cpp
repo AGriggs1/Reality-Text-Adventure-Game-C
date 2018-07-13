@@ -178,7 +178,7 @@ bool compareLocations(Locale one, Locale two) {
 void examineLocation(int localeID) {
     cout << locations[localeID]._examineDescription << endl;
     cout << "You see a/an: " << endl;
-    locations[localeID].printItems();
+    locations[localeID].printItems(false);
     locations[localeID]._searched = true;
 
 }
@@ -246,7 +246,7 @@ void decipher(string command) {
     //take
     else if(compareIgnoreCase(command.substr(0, 3), "take")) {
         //See if this is a two-word command... try to take with what should be the second half...
-        if(locations[Luca.getLocale()]._searched) {
+
 
         if(command.length() > 4) {
             cout << command.substr(4, command.length());
@@ -254,10 +254,19 @@ void decipher(string command) {
             else cout << "Could not find item " << command.substr(4, command.length());
         }
         //Otherwise, prompt for what item the player wants
-        else if(locations[Luca.getLoca])
-
+        else {
+            int numItems = 0;
+            cout << "Take what?\n";
+            for(int i = 0; i < 30; i++) {
+                if(locations[Luca.getLocale()]._canTake[i] == true) numItems++;
+            }
+            if(numItems > 0) {
+                locations[Luca.getLocale()].printItems(true);
+                getline(cin, command);
+                if(take(Luca.getLocale(), command)) cout << "took " << command;
+                else cout << "Could not find " << command;
+            }
         }
-
     }
         //other commands
     else if(compareIgnoreCase(command, "help")) cout << "List of commands:\n"
