@@ -57,7 +57,8 @@ Locale hallway1(7, "You enter a hallway and come to a corner", "You are at a hal
                                                                                                "     + |  -      \n"
                                                                                                "   45--n3--42     \n"
                                                                                                "     = |  =      \n"
-                                                                                               "     = 46 =        ");
+                                                                                               "     = 46 =       \n "
+                                                                                               "You are at: b");
 Locale officeNW(8, "You enter one of the office corners.", "You are in the Northwest corner of the office.", "The place is a mess. Papers and various other supplies litter the floor.");
 Locale officeW(9, "You come to a room and nothing but cubicles. So you're in an office, then.", "You are in the office", "Cubicles, cubicles, cubicles.");
 Locale officeSW(10, "You enter one of the office corners, which has a particularly large ficus. You study it with intensity.", "You are in the Southwest corner of the office.", "What. A. Ficus.");
@@ -88,6 +89,13 @@ Locale river(19, "You continue down a dirt pathway, coming to a riverbank. You h
 Locale lake(20, "You follow the river, eventually finding yourself at a large lake.", "You are at the lake.", "You walk along the shores, keeping an eye out for any interesting finds.");
 Locale waterfall(21, "You follow the river to a watefall. Looks pretty tall.", "You are at the waterfall.", "You take a look around the area.");
 Locale caveE(22, "You go behind the waterfall, and the find the entrance to a cavern.", "You are behind the waterfall.", "You take a look around.");
+Locale cave(23, "You enter the cave. It's pitch black.", "You are in the cavern.", "");
+Locale deepCave(24, "You continue onward, inching slowly. You eventually come to an small chamber with a small opening to the surface, allowing you to see."
+                    "You take notice of the many symbols drawn on the chamber floor in what could be chalk. Whatever it is, looks like it's for ritualistic purposes",
+                "You are in a cave chamber.", "");
+Locale ravine(25, "You take a step foward, unaware that there is no surface for you step on. You fall, tumbling down, down, down... You hit the bottom of a ravine,"
+                  "hard. You can't see what's broken, but it doesn't feel good. You begin to slip out of consciousness.", "You're at the bottom of a ravine.", "");
+Locale watertop(26, "Following the river's current, you come across the top of a waterfall. Looks pretty tall from here.", "It's the top of a waterfall. Again.", "");
 //Create an array to act as a dictionary for the locales
 Locale na(-1, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
 //Also NULL doesn't work either because why would it?
@@ -122,8 +130,12 @@ Locale navigator[50][6] = {
         {na, river, na, na}, //---------------------------forest
         {forest, na, waterfall, lake}, //-----------------river
         {na, na, river, na}, //---------------------------lake
-        {na, na, na, river}, //---------------------------waterfall
-        {na, na, na, waterfall} //---------------------cavE
+        {na, na, caveE, river}, //------------------------waterfall
+        {na,cave, na, waterfall}, //----------------------caveE
+        {caveE, ravine, na, deepCave}, //-----------------cave
+        {na, na, cave, na}, //----------------------------deepCave
+        {cave, na, na, na,}, //---------------------------ravine
+        {na, na, river, waterfall} //---------------------watertop
 };
 //Define Items
 bool canTakeItem[100] = {};
@@ -336,6 +348,9 @@ void decipher(string command) {
                                                         "South - moves south\n"
                                                         "East - moves east\n"
                                                         "West - moves west\n"
+                                                        "Take - pickup a specified item at your current location\n"
+                                                        "Drop - put down a specified item at your current location\n"
+                                                        "Use - use a specified item at your current location\n"
                                                         "Look - displays the long description of your current location\n"
                                                         "Score - displays your current score\n"
                                                         "Moves - displays your current moves\n"
@@ -355,7 +370,7 @@ void decipher(string command) {
  */
 void resetMain() {
     copyNav(true);
-    for(int i = 0; i < 6; i++) locations[i].reset();
+    for(int i = 0; i < 26; i++) locations[i].reset();
     Luca.updateID(1);
     Luca.updateScore(-Luca.getScore());
     Luca.setMoves(0);
@@ -401,9 +416,11 @@ bool tutorial() {
         locations[Luca.getLocale()].updateVisited();
         //Check what the command was...
         if(compareIgnoreCase(command, "quit")) return false;
+        else if(compareIgnoreCase(command, "skip")) return true;
         decipher(command);
 
         if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
+
         //The player must find all blocks and place them in the right location to complete the tutorial
         if(locations[2].getItemByIndex("N-BLOCK") > -1 && locations[3].getItemByIndex("S-BLOCK") > -1 &&  locations[4].getItemByIndex("E-BLOCK") > -1 && locations[5].getItemByIndex("W-BLOCK") > -1) completed = true;
     }
@@ -419,6 +436,7 @@ bool game() {
         if(compareIgnoreCase(command, "quit")) return false;
         decipher(command);
         if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
+        //Did the player enter the center hallway?
         if(Luca.getLocale() == officeC.getID()) {
             //Switch the hallways
             switchLocations(officeW.getID(), 3, officeE.getID(), 2);
@@ -431,6 +449,16 @@ bool game() {
             replaceLocation(navigator[officeE.getID()][2].getID(), 2, na);
             replaceLocation(navigator[officeE.getID()][2].getID(), 3, officeE);
         }
+        //Did the player visit the broom closet after 5 moves?
+        else if(Luca.getLocale() == closet.getID() && Luca.getMoves() > 4) {
+            //Kill them
+            cout << "Suddenly the door slams shut behind you. You attempt to open, only for the doorknob to fall off\nBaby: Did you get the Broom Closet Ending? The Broom Closet Ending is my favorite!" << endl;
+            return false;
+        }
+        //Did the player visit the lake?
+       // else if(Luca.getLocale() == lake.getID()) {
+        //    replaceLocation(waterfall.getID(), )
+        //}
         if(command == "No Luca no") completed = true; //Placeholder. Also reference ftw
     }
 }
@@ -466,7 +494,7 @@ bool init() {
     locations[18].addItem("ROPE", true);
     //Lake
     locations[20].addItem("DOLL", true);
-    //There's supposed to be another map item at 18 too, but I'm going to change that here
+    //There's supposed to be another map item at 18 too, but I'm going to change that in this version
     copyNav(false);
     string dummy;
     cout << endl;
