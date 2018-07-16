@@ -137,10 +137,10 @@ Locale navigator[50][6] = {
         {cave, na, na, na,}, //---------------------------ravine
         {na, na, river, waterfall} //---------------------watertop
 };
-//Define Items
-bool canTakeItem[100] = {};
 Player Luca("nil", 1);
 string cont = "continue";
+//bool usedItem[10] = {false, false, false, false, false, false, false, false, false, false};
+
 
 /*
  *
@@ -233,6 +233,11 @@ void examineLocation(int localeID) {
     locations[localeID]._searched = true;
 
 }
+//Since there aren't that many items, I'm going to use individual variables to determine if an item was used
+bool usedBatteries = false;
+bool usedFlashlight = false;
+bool usedHammer = false;
+
 /*
  * take
  * takes the item at the given locale, if possible
@@ -277,6 +282,49 @@ bool compareIgnoreCase(string one, string two) {
         if(a != b) return false;
     }
     return true;
+}
+/*
+ * use
+ * sees if the passed string is an item, and if it can be used
+ * returns the message to be output
+ */
+string use(int localeID, string item) {
+    //The player must have the item to use it, naturally
+    string message = "You do not have any " + item;
+    if(Luca.getItemByIndex(item) == -1) return message;
+    message = "Cannot use the " + item + " here.";
+    //Flashlight
+    if(compareIgnoreCase(item, "flashlight")) {
+        //The player must have used the batteries
+        if(usedBatteries && !usedFlashlight) {
+            //The player must be in the cave
+            if(localeID == cave.getID()) {
+                usedFlashlight = true;
+                return "You turn on the flashlight. to reveal a sharp drop-off to your south. If only you had a way down...";
+            }
+            else return "It works, but no need to use it here";
+        }
+        else if(!usedBatteries) return "Looks like it needs batteries.";
+    }
+    //Hammer
+    else if(compareIgnoreCase(item, "hammer")) {
+        //Is the location hallway1?
+        if(localeID == hallway1.getID() && !usedHammer) {
+            usedHammer = true;
+            return "You take the hammer and smash the glass casing. You can now take the map.";
+        }
+        else return "No need for that here.";
+        //TODO: ElevatorUp
+    }
+    //Rope
+    else if(compareIgnoreCase(item, "Rope")) {
+        if(localeID == cave.getID() && usedFlashlight) {
+            Luca.removeItem(Luca.getItemByIndex(item));
+            //TODO: replaceLocation
+            return "You secure the rope to the ledge and throw it down the ravine. Did it reach any bottom?";
+         }
+    }
+    return "Could not find item " + item;
 }
 /*
  * decipher
@@ -338,6 +386,19 @@ void decipher(string command) {
         }
         else {
             cout << "Drop what?\n";
+            getline(cin, command);
+            if(drop(Luca.getLocale(), command)) cout << "dropped the " << command << endl;
+        }
+    }
+    //use
+    else if(compareIgnoreCase(command.substr(0, 3), "use")) {
+        if(command.length() > 3) {
+            cout << use(Luca.getLocale(), makeUpper(command.substr(4, command.length()))) << endl;
+        }
+        else {
+            cout << "Use what\n";
+            getline(cin, command);
+            cout << use(Luca.getLocale(), makeUpper(command)) << endl;
         }
     }
         //other commands
@@ -469,10 +530,6 @@ bool game() {
  */
 bool init() {
     // << is concatenation
-    //set all items as untakeable
-    for(int i = 0; i < 20; i++) {
-        canTakeItem[i] = false;
-    }
     //place items
     //voidC
             //Lets make items be in upper case to make things easier
