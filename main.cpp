@@ -237,6 +237,7 @@ void examineLocation(int localeID) {
 bool usedBatteries = false;
 bool usedFlashlight = false;
 bool usedHammer = false;
+bool usedKey = false;
 
 /*
  * take
@@ -305,6 +306,7 @@ string use(int localeID, string item) {
             else return "It works, but no need to use it here";
         }
         else if(!usedBatteries) return "Looks like it needs batteries.";
+        else return "It works, but no need to use it here";
     }
     //Hammer
     else if(compareIgnoreCase(item, "hammer")) {
@@ -324,6 +326,35 @@ string use(int localeID, string item) {
             return "You secure the rope to the ledge and throw it down the ravine. Did it reach any bottom?";
          }
     }
+    //Matches
+    else if(compareIgnoreCase(item, "Matches")) {
+        int dollDex = locations[localeID].getItemByIndex("DOLL");
+        if(localeID == deepCave.getID() && dollDex > -1) {
+            locations[localeID].removeItem(dollDex);
+            locations[localeID].addItem("KEY", false);
+            Luca.removeItem(Luca.getItemByIndex(item));
+            return "With the doll in the incantation circle, you light a match and set it ablaze. Eventually, the flames die down, leaving nothing but the ashen remains, and a key.";
+        }
+    }
+    //Batteries
+    else if(compareIgnoreCase(item, "Batteries")) {
+        if(!Luca.getItemByIndex("FLASHLIGHT")) return "Nothing to use those with.";
+        else {
+            usedBatteries = true;
+            Luca.removeItem(Luca.getItemByIndex(item));
+            return "You put the batteries in the flashlight.";
+        }
+    }
+    //Key
+    else if(compareIgnoreCase(item, "Key")) {
+        if(localeID == officeS.getID()) {
+            //TODO: unlock corridor1
+            //replaceLocations(officeS.getID(), 1, corridor1)
+            usedKey = true;
+            return "Using the key, you unlock the double doors";
+
+    }
+    //TODO: corridor buttons
     return "Could not find item " + item;
 }
 /*
