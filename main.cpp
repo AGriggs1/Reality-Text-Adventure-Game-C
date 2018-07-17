@@ -75,14 +75,16 @@ Locale hallway2(17, "You walk down a hallway, and come to a corner.", "You are a
 
 Locale forest(18, "You pass through a pair of doors, and well... now you're in a forest. You look behind you, and the building you were just in has completely vanished. Well then.",
 "You are in the forest.", "You can faintly hear what sounds like running water in the distance. A nearby notice board catches your attention. it reads:\n"
-                         "New Pena National Forest\n"
-                         "e             \n"
-                         "|             \n"
-                         "g--f--h--i    \n"
-                         "         |    \n"
-                         "      j--k    \n"
-                         "         |    \n"
-                         "         l--m \n"
+                         "\nNew Pena National Forest\n"
+                         "========================\n\n"
+                         "    e             \n"
+                         "    |             \n"
+                         "    g--f--h--i    \n"
+                         "             |    \n"
+                         "          j--k    \n"
+                         "             |    \n"
+                         "             l--m \n"
+                         "\nYou are at: e   \n"
                          "\nExplore one of the many cave systems found within our beautiful forest! See the incantation circles where locals performed their rituals! Book your guided tour now!\n"
                          "WARNING: Cave spelunking can a dangerous activity, especially for the untrained! DO NOT EXPLORE UNAUTHORIZED AREAS ALONE OR WITHOUT A TRAINED PARK GUIDE!");
 Locale river(19, "You continue down a dirt pathway, coming to a riverbank. You here what sounds like thunder in the distance", "You are at the river", "Just a river.");
@@ -103,7 +105,7 @@ Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW,
                         closet, hallway1, officeNW, officeW, officeSW,
                         officeN, officeC, officeS, officeNE, officeE,
                         officeSE, hallway2, forest, river, lake, waterfall,
-                        caveE};
+                        caveE, cave, deepCave, watertop};
 //NavMat
         //navigator[localeID][iDirection] = Locale
                 //0 = North, 1 = South, 2 = East, 3 = West
@@ -126,18 +128,18 @@ Locale navigator[50][6] = {
         {na, officeE, na, na}, //-------------------------officeNE
         {officeNE, officeSE, hallway2, officeC}, //-------officeE
         {officeE, na, na, officeS}, //--------------------officeSE
-        {na, na, na, officeE}, //-------------------------hallway2
+        {na, forest, na, officeE}, //-------------------------hallway2
         {na, river, na, na}, //---------------------------forest
         {forest, na, waterfall, lake}, //-----------------river
         {na, na, river, na}, //---------------------------lake
-        {na, na, caveE, river}, //------------------------waterfall
-        {na,cave, na, waterfall}, //----------------------caveE
+        {na, na, na, river}, //---------------------------waterfall
+        {na, cave, na, waterfall}, //----------------------caveE
         {caveE, ravine, na, deepCave}, //-----------------cave
         {na, na, cave, na}, //----------------------------deepCave
         {cave, na, na, na,}, //---------------------------ravine
         {na, na, river, waterfall} //---------------------watertop
 };
-Player Luca("nil", 1);
+Player Luca("Lucas", 1);
 string cont = "continue";
 //bool usedItem[10] = {false, false, false, false, false, false, false, false, false, false};
 
@@ -335,10 +337,11 @@ string use(int localeID, string item) {
             Luca.removeItem(Luca.getItemByIndex(item));
             return "With the doll in the incantation circle, you light a match and set it ablaze. Eventually, the flames die down, leaving nothing but the ashen remains, and a key.";
         }
+        else return "No need for that here.";
     }
     //Batteries
     else if(compareIgnoreCase(item, "Batteries")) {
-        if(!Luca.getItemByIndex("FLASHLIGHT")) return "Nothing to use those with.";
+        if(Luca.getItemByIndex("FLASHLIGHT") == -1) return "Nothing to use those with.";
         else {
             usedBatteries = true;
             Luca.removeItem(Luca.getItemByIndex(item));
@@ -352,7 +355,7 @@ string use(int localeID, string item) {
             //replaceLocations(officeS.getID(), 1, corridor1)
             usedKey = true;
             return "Using the key, you unlock the double doors";
-
+        }
     }
     //TODO: corridor buttons
     return "Could not find item " + item;
@@ -541,16 +544,28 @@ bool game() {
             replaceLocation(navigator[officeE.getID()][2].getID(), 2, na);
             replaceLocation(navigator[officeE.getID()][2].getID(), 3, officeE);
         }
+        /*
+         * LOCATION MUTATORS
+         */
         //Did the player visit the broom closet after 5 moves?
         else if(Luca.getLocale() == closet.getID() && Luca.getMoves() > 4) {
             //Kill them
             cout << "Suddenly the door slams shut behind you. You attempt to open, only for the doorknob to fall off\nBaby: Did you get the Broom Closet Ending? The Broom Closet Ending is my favorite!" << endl;
             return false;
         }
-        //Did the player visit the lake?
-       // else if(Luca.getLocale() == lake.getID()) {
-        //    replaceLocation(waterfall.getID(), )
-        //}
+        //Did the player go to the lake?
+        else if(Luca.getLocale() == lake.getID()) {
+            replaceLocation(waterfall.getID(), 2, caveE);
+        }
+        //Did the player visit the waterfall before the lake?
+        else if(Luca.getLocale() == waterfall.getID() && !locations[lake.getID()].getVisited()) {
+            replaceLocation(river.getID(), 3, watertop);
+            cout << "Wait... isn't there supposed to be something east of here?" << endl;
+        }
+        //If the lake is blocked, unblock it
+        else if(Luca.getLocale() == forest.getID() && navigator[river.getID()][3].getID() == watertop.getID()) {
+            replaceLocation(river.getID(), 3, lake);
+        }
         if(command == "No Luca no") completed = true; //Placeholder. Also reference ftw
     }
 }
@@ -577,7 +592,7 @@ bool init() {
     //Hallway1
     locations[7].addItem("MAP", true);
     //OfficeSW
-    locations[8].addItem("BATTERIES", true);
+    locations[10].addItem("BATTERIES", true);
     //Forest
     locations[18].addItem("ROPE", true);
     //Lake
