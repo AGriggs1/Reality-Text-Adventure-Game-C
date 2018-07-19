@@ -87,17 +87,18 @@ Locale forest(18, "You pass through a pair of doors, and well... now you're in a
                          "\nYou are at: e   \n"
                          "\nExplore one of the many cave systems found within our beautiful forest! See the incantation circles where locals performed their rituals! Book your guided tour now!\n"
                          "WARNING: Cave spelunking can a dangerous activity, especially for the untrained! DO NOT EXPLORE UNAUTHORIZED AREAS ALONE OR WITHOUT A TRAINED PARK GUIDE!");
-Locale river(19, "You continue down a dirt pathway, coming to a riverbank. You here what sounds like thunder in the distance", "You are at the river", "Just a river.");
+Locale river(19, "You continue down a dirt pathway, coming to a riverbank. You here what sounds like thunder in the distance.", "You are at the river", "Just a river.");
 Locale lake(20, "You follow the river, eventually finding yourself at a large lake.", "You are at the lake.", "You walk along the shores, keeping an eye out for any interesting finds.");
-Locale waterfall(21, "You follow the river to a watefall. Looks pretty tall.", "You are at the waterfall.", "You take a look around the area.");
+Locale waterfall(21, "You follow the river to a waterfall. Looks pretty tall.", "You are at the waterfall.", "You take a look around the area.");
 Locale caveE(22, "You go behind the waterfall, and the find the entrance to a cavern.", "You are behind the waterfall.", "You take a look around.");
 Locale cave(23, "You enter the cave. It's pitch black.", "You are in the cavern.", "");
 Locale deepCave(24, "You continue onward, inching slowly. You eventually come to an small chamber with a small opening to the surface, allowing you to see."
                     "You take notice of the many symbols drawn on the chamber floor in what could be chalk. Whatever it is, looks like it's for ritualistic purposes",
                 "You are in a cave chamber.", "");
-Locale ravine(25, "You take a step foward, unaware that there is no surface for you step on. You fall, tumbling down, down, down... You hit the bottom of a ravine,"
-                  "hard. You can't see what's broken, but it doesn't feel good. You begin to slip out of consciousness.", "You're at the bottom of a ravine.", "");
+Locale ravine(25, "You take a step forward, unaware that there is no surface for you step on. You fall, tumbling down, down, down... You hit the bottom of a ravine,"
+                  " hard. You can't see what's broken, but it doesn't feel good. You begin to slip out of consciousness.", "You're at the bottom of a ravine.", "");
 Locale watertop(26, "Following the river's current, you come across the top of a waterfall. Looks pretty tall from here.", "It's the top of a waterfall. Again.", "");
+
 //Create an array to act as a dictionary for the locales
 Locale na(-1, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
 //Also NULL doesn't work either because why would it?
@@ -105,7 +106,7 @@ Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW,
                         closet, hallway1, officeNW, officeW, officeSW,
                         officeN, officeC, officeS, officeNE, officeE,
                         officeSE, hallway2, forest, river, lake, waterfall,
-                        caveE, cave, deepCave, watertop};
+                        caveE, cave, deepCave, ravine, watertop};
 //NavMat
         //navigator[localeID][iDirection] = Locale
                 //0 = North, 1 = South, 2 = East, 3 = West
@@ -241,6 +242,7 @@ bool usedFlashlight = false;
 bool usedHammer = false;
 bool usedKey = false;
 
+
 /*
  * take
  * takes the item at the given locale, if possible
@@ -286,6 +288,7 @@ bool compareIgnoreCase(string one, string two) {
     }
     return true;
 }
+bool ravineKills = true;
 /*
  * use
  * sees if the passed string is an item, and if it can be used
@@ -305,10 +308,10 @@ string use(int localeID, string item) {
                 usedFlashlight = true;
                 return "You turn on the flashlight. to reveal a sharp drop-off to your south. If only you had a way down...";
             }
-            else return "It works, but no need to use it here";
+            else return "It works, but no need to use it here.";
         }
         else if(!usedBatteries) return "Looks like it needs batteries.";
-        else return "It works, but no need to use it here";
+        else return "It works, but no need to use it here.";
     }
     //Hammer
     else if(compareIgnoreCase(item, "hammer")) {
@@ -324,9 +327,12 @@ string use(int localeID, string item) {
     else if(compareIgnoreCase(item, "Rope")) {
         if(localeID == cave.getID() && usedFlashlight) {
             Luca.removeItem(Luca.getItemByIndex(item));
-            //TODO: replaceLocation
+            ravineKills = false;
+            //update the ravine description
+            locations[ravine.getID()]._longDescription = "You carefully shimmy down the rope, eventually reaching the bottom of the ravine. Now what?";
             return "You secure the rope to the ledge and throw it down the ravine. Did it reach any bottom?";
          }
+         else return "No need for that here";
     }
     //Matches
     else if(compareIgnoreCase(item, "Matches")) {
@@ -393,7 +399,7 @@ void decipher(string command) {
 
         if(command.length() > 4) {
             string item = command.substr(5, command.length());
-            if(take(Luca.getLocale(), item)) cout << "took the " << item << endl;
+            if(take(Luca.getLocale(), item)) cout << "took the " << item << "." << endl;
             else cout << "Could not find item " << item << endl;
         }
         //Otherwise, prompt for what item the player wants
@@ -406,7 +412,7 @@ void decipher(string command) {
             if(numItems > 0 || locations[Luca.getLocale()]._searched) {
                 locations[Luca.getLocale()].printItems(!locations[Luca.getLocale()]._searched);
                 getline(cin, command);
-                if(take(Luca.getLocale(), command)) cout << "took the" << command << endl;
+                if(take(Luca.getLocale(), command)) cout << "took the" << command <<  "." << endl;
                 else cout << "Could not find " << command;
             }
         }
@@ -415,13 +421,13 @@ void decipher(string command) {
     else if(compareIgnoreCase(command.substr(0, 4), "drop")) {
         if(command.length() > 4) {
             string item = command.substr(5, command.length());
-            if(drop(Luca.getLocale(), item)) cout << "dropped the " << item << endl;
+            if(drop(Luca.getLocale(), item)) cout << "dropped the " << item <<  "." << endl;
             else cout << "You do not have any " << item;
         }
         else {
             cout << "Drop what?\n";
             getline(cin, command);
-            if(drop(Luca.getLocale(), command)) cout << "dropped the " << command << endl;
+            if(drop(Luca.getLocale(), command)) cout << "dropped the " << command << "." << endl;
         }
     }
     //use
@@ -470,6 +476,11 @@ void resetMain() {
     Luca.updateScore(-Luca.getScore());
     Luca.setMoves(0);
     Luca.clearInventory();
+    usedBatteries = false;
+    usedFlashlight = false;
+    usedHammer = false;
+    usedKey = false;
+    ravineKills = true;
 }
 /*
  * switchLocations
@@ -531,6 +542,9 @@ bool game() {
         if(compareIgnoreCase(command, "quit")) return false;
         decipher(command);
         if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
+        /*
+         * LOCATION MUTATORS
+         */
         //Did the player enter the center hallway?
         if(Luca.getLocale() == officeC.getID()) {
             //Switch the hallways
@@ -544,15 +558,7 @@ bool game() {
             replaceLocation(navigator[officeE.getID()][2].getID(), 2, na);
             replaceLocation(navigator[officeE.getID()][2].getID(), 3, officeE);
         }
-        /*
-         * LOCATION MUTATORS
-         */
-        //Did the player visit the broom closet after 5 moves?
-        else if(Luca.getLocale() == closet.getID() && Luca.getMoves() > 4) {
-            //Kill them
-            cout << "Suddenly the door slams shut behind you. You attempt to open, only for the doorknob to fall off\nBaby: Did you get the Broom Closet Ending? The Broom Closet Ending is my favorite!" << endl;
-            return false;
-        }
+
         //Did the player go to the lake?
         else if(Luca.getLocale() == lake.getID()) {
             replaceLocation(waterfall.getID(), 2, caveE);
@@ -565,6 +571,21 @@ bool game() {
         //If the lake is blocked, unblock it
         else if(Luca.getLocale() == forest.getID() && navigator[river.getID()][3].getID() == watertop.getID()) {
             replaceLocation(river.getID(), 3, lake);
+        }
+
+        /*
+         * Location specific events
+         */
+            //Did the player visit the broom closet after 5 moves?
+        else if(Luca.getLocale() == closet.getID() && Luca.getMoves() > 4) {
+            //Kill them
+            cout << "Suddenly the door slams shut behind you. You attempt to open, only for the doorknob to fall off\nBaby: Did you get the Broom Closet Ending? The Broom Closet Ending is my favorite!" << endl;
+            return false;
+        }
+        //Did the player go to the ravine without using the rope? Kill them
+        else if(Luca.getLocale() == ravine.getID() && ravineKills) {
+            cout << ravine._longDescription << endl << "Baby: D'ah, did somebody find their mortality?";
+            return false;
         }
         if(command == "No Luca no") completed = true; //Placeholder. Also reference ftw
     }
