@@ -262,6 +262,10 @@ bool take(int localeID, string item) {
     if(index == -1) return false;
     //Has the player searched the location? If so, they are free to take the item
     if(locations[localeID]._searched) {
+            if(makeUpper(item) == "MAP" && !usedHammer) {
+                cout << "It's behind the glass casing, of which there does not seem to be a way of opening.\n";
+                return false;
+            }
             Luca.addItem(locations[localeID].removeItem(index));
             return true;
     }
@@ -315,6 +319,44 @@ void replaceLocation(int r, int c, Locale cola) {
     navigator[r][c] = cola;
 }
 bool ravineKills = true;
+string map = "   c1--C   c6     \n"
+             "   |   |   |      \n"
+             "b--c2--c4--c7--d  \n"
+             "|  |   |   |   |  \n"
+             "a  c3--c5--c8  e  \n"
+             "       |          \n"
+             "       |          \n"
+             "   51--n1--40     \n"
+             "     - |  +      \n"
+             "   50--n2--48     \n"
+             "     + |  -      \n"
+             "   45--n3--42     \n"
+             "     = |  =      \n"
+             "     = 46 =        ";
+
+string bigMap = "   c1--C   c6             \n"
+                "   |   |   |              \n"
+                "b--c2--c4--c7--d          \n"
+                "|  |   |   |   |          \n"
+                "a  c3--c5--c8  e          \n"
+                "       |       |          \n"
+                "       |    g--f--h--i    \n"
+                "       |             |    \n"
+                "   51--n1--40     j--k    \n"
+                "       |             |    \n"
+                "       n2            l--m \n"
+                "       |                  \n"
+                "   50--n3--48             \n"
+                "       |                  \n"
+                "       n4                 \n"
+                "       |                  \n"
+                "   45--n5--42             \n"
+                "       |                  \n"
+                "       46                   ";
+//Used for telling the player where they are
+string mapDiction[50] = {"", "", "", "", "", "", "a", "b", "c1", "c2", "c3", "C", "c4", "c5", "c6", "c7",
+                        "c8", "d", "e", "g", "f", "h", "i", "k", "j", "l", "g", "m", "m", "46", "n1", "51",
+                         "40", "n2", "n3", "50", "48", "n4", "n5", "45", "43", "46"};
 /*
  * use
  * sees if the passed string is an item, and if it can be used
@@ -342,7 +384,7 @@ string use(int localeID, string item) {
     //Hammer
     else if(compareIgnoreCase(item, "hammer")) {
         //Is the location hallway1?
-        if(localeID == hallway1.getID() && !usedHammer) {
+        if(localeID == hallway1.getID() && locations[localeID]._searched && !usedHammer) {
             usedHammer = true;
             return "You take the hammer and smash the glass casing. You can now take the map.";
         }
@@ -391,6 +433,11 @@ string use(int localeID, string item) {
             usedKey = true;
             return "Using the key, you unlock the double doors";
         }
+    }
+    //Map
+    else if(compareIgnoreCase(item, "Map")) {
+        if(locations[forest.getID()]._searched) return bigMap + "\nYou are at: " + mapDiction[localeID];
+        return map + "\nYou are at: " + mapDiction[localeID];
     }
     //TODO: corridor buttons
     return "Could not find item " + item;
@@ -448,7 +495,7 @@ void decipher(string command) {
                 locations[Luca.getLocale()].printItems(!locations[Luca.getLocale()]._searched);
                 getline(cin, command);
                 if(take(Luca.getLocale(), command)) cout << "took the " << command <<  "." << endl;
-                else cout << "Could not find " << command;
+                else cout << "Could not find " << command << ".";
             }
         }
     }
