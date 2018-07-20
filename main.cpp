@@ -98,7 +98,8 @@ Locale deepCave(24, "You continue onward, inching slowly. You eventually come to
 Locale ravine(25, "You take a step forward, unaware that there is no surface for you step on. You fall, tumbling down, down, down... You hit the bottom of a ravine,"
                   " hard. You can't see what's broken, but it doesn't feel good. You begin to slip out of consciousness.", "You're at the bottom of a ravine.", "");
 Locale watertop(26, "Following the river's current, you come across the top of a waterfall. Looks pretty tall from here.", "It's the top of a waterfall. Again.", "");
-
+Locale elevator(27, "You shuffle through the ravine, coming to well, an elevator. Now, up... or down?", "You are in an elevator", "Nothing or note. There is a panel with an up and a down button, though.");
+Locale elevatorUp(28, "You press the up button. You feel your weight shift as the elevator makes it way upwards. It stops at a 'ding!' The doors slide open to reveal... a wall.", "You are in the elevator", "Where there's a wall, there's a room, right?");
 //Create an array to act as a dictionary for the locales
 Locale na(-1, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
 //Also NULL doesn't work either because why would it?
@@ -106,10 +107,11 @@ Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW,
                         closet, hallway1, officeNW, officeW, officeSW,
                         officeN, officeC, officeS, officeNE, officeE,
                         officeSE, hallway2, forest, river, lake, waterfall,
-                        caveE, cave, deepCave, ravine, watertop};
+                        caveE, cave, deepCave, ravine, watertop, elevator,
+                        elevatorUp};
 //NavMat
         //navigator[localeID][iDirection] = Locale
-                //0 = North, 1 = South, 2 = East, 3 = West
+                //0 = North, 1 = South, 2 = East, 3 = West, 4 = Up, 5 = Down
 Locale navigator[50][6] = {
         {na, na, na, na, na, na},
         {voidN, voidS, voidE, voidW}, //------------------voidC
@@ -137,8 +139,11 @@ Locale navigator[50][6] = {
         {na, cave, na, waterfall}, //----------------------caveE
         {caveE, ravine, na, deepCave}, //-----------------cave
         {na, na, cave, na}, //----------------------------deepCave
-        {cave, na, na, na,}, //---------------------------ravine
-        {na, na, river, waterfall} //---------------------watertop
+        {cave, na, elevator, na,}, //---------------------ravine
+        {na, na, river, waterfall}, //--------------------watertop
+        {na, na, na, na, elevatorUp, na}, //--------------elevator
+        {na, na, na, na, na, elevator} //----------------elevatorUp
+
 };
 Player Luca("Lucas", 1);
 string cont = "continue";
@@ -288,6 +293,23 @@ bool compareIgnoreCase(string one, string two) {
     }
     return true;
 }
+/*
+ * switchLocations
+ * Takes two sets of rows and columns for the navigation matrix
+ * Switches the locations at those rows and columns with each other
+ */
+void switchLocations(int r1, int c1, int r2, int c2) {
+    Locale temp = navigator[r1][c1];
+    navigator[r1][c1] = navigator[r2][c2];
+    navigator[r2][c2] = temp;
+}
+/*
+ * replaceLocation
+ * Replaces a Locale at a row and column of the Navigation Maxtrix with another Locale
+ */
+void replaceLocation(int r, int c, Locale cola) {
+    navigator[r][c] = cola;
+}
 bool ravineKills = true;
 /*
  * use
@@ -320,8 +342,11 @@ string use(int localeID, string item) {
             usedHammer = true;
             return "You take the hammer and smash the glass casing. You can now take the map.";
         }
+        else if(localeID == elevatorUp.getID() && navigator[elevatorUp.getID()][0].getID() == -1) {
+            replaceLocation(elevatorUp.getID(), 0, officeSE);
+            return "You smash a hole in the wall. You look through to see a room. You continually do so until the opening is large enough for you to fit through. It's... the office. It looks you smashed through the portrait of Bobbo the clown, though.";
+        }
         else return "No need for that here.";
-        //TODO: ElevatorUp
     }
     //Rope
     else if(compareIgnoreCase(item, "Rope")) {
@@ -482,23 +507,7 @@ void resetMain() {
     usedKey = false;
     ravineKills = true;
 }
-/*
- * switchLocations
- * Takes two sets of rows and columns for the navigation matrix
- * Switches the locations at those rows and columns with each other
- */
-void switchLocations(int r1, int c1, int r2, int c2) {
-    Locale temp = navigator[r1][c1];
-    navigator[r1][c1] = navigator[r2][c2];
-    navigator[r2][c2] = temp;
-}
-/*
- * replaceLocation
- * Replaces a Locale at a row and column of the Navigation Maxtrix with another Locale
- */
-void replaceLocation(int r, int c, Locale cola) {
-    navigator[r][c] = cola;
-}
+
 /*
  *
  * GAMEPLAY FUNCTIONS
@@ -584,7 +593,7 @@ bool game() {
         }
         //Did the player go to the ravine without using the rope? Kill them
         else if(Luca.getLocale() == ravine.getID() && ravineKills) {
-            cout << ravine._longDescription << endl << "Baby: D'ah, did somebody find their mortality?";
+            cout << ravine._longDescription << endl << "Baby: D'awwwww, did somebody find their mortality?";
             return false;
         }
         if(command == "No Luca no") completed = true; //Placeholder. Also reference ftw
