@@ -93,7 +93,7 @@ Locale waterfall(21, "You follow the river to a waterfall. Looks pretty tall.", 
 Locale caveE(22, "You go behind the waterfall, and the find the entrance to a cavern.", "You are behind the waterfall.", "You take a look around.");
 Locale cave(23, "You enter the cave. It's pitch black.", "You are in the cavern.", "");
 Locale deepCave(24, "You continue onward, inching slowly. You eventually come to an small chamber with a small opening to the surface, allowing you to see."
-                    "You take notice of the many symbols drawn on the chamber floor in what could be chalk. Whatever it is, looks like it's for ritualistic purposes",
+                    " You take notice of the many symbols drawn on the chamber floor in what could be chalk. Whatever it is, looks like it's for ritualistic purposes",
                 "You are in a cave chamber.", "");
 Locale ravine(25, "You take a step forward, unaware that there is no surface for you step on. You fall, tumbling down, down, down... You hit the bottom of a ravine,"
                   " hard. You can't see what's broken, but it doesn't feel good. You begin to slip out of consciousness.", "You're at the bottom of a ravine.", "");
@@ -421,7 +421,12 @@ void decipher(string command) {
         if(localeID > -1) Luca.updateID(localeID);
         else cout << "You cannot go that way." << endl;
     }
-    
+    else if(compareIgnoreCase(command, "up")) {
+        int localeID = navigator[Luca.getLocale()][4].getID();
+        if(localeID > -1) Luca.updateID(localeID);
+        else cout << "You cannot go that way." << endl;
+    }
+    //NOT GOING TO IMPLEMENT DOWN IN THIS VERSION, IT NEVER GETS USED
     //take
     else if(compareIgnoreCase(command.substr(0, 4), "take")) {
         //See if this is a two-word command... try to take with what should be the second half...
@@ -442,7 +447,7 @@ void decipher(string command) {
             if(numItems > 0 || locations[Luca.getLocale()]._searched) {
                 locations[Luca.getLocale()].printItems(!locations[Luca.getLocale()]._searched);
                 getline(cin, command);
-                if(take(Luca.getLocale(), command)) cout << "took the" << command <<  "." << endl;
+                if(take(Luca.getLocale(), command)) cout << "took the " << command <<  "." << endl;
                 else cout << "Could not find " << command;
             }
         }
