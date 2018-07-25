@@ -711,17 +711,46 @@ bool init() {
     prompt(cont);
     getline(cin, dummy);
     cout << "???: You look confused! Do you remember your name? Ya know, that thing people call you? Yeah. That!\n<Enter your name>\n";
-    cin >> dummy;
+    getline(cin, dummy);
+    //so cin >> std::string terminates at the first white space. Good to know
+    //doing getline should be fine now, since I set up a default name
+
     //TODO: Fun with names ;)
+    if(dummy == "Boy from Nowhere") {
+        cout << "Baby: Yes master?" << endl;
+        while(!compareIgnoreCase("end", dummy)) {
+            cout << endl;
+            getline(cin, dummy);
+            if(compareIgnoreCase("all items", dummy)) {
+                cout << "Baby: Giving all items." << endl;
+                //We'll do this manually
+                Luca.addItem(locations[1].removeItem(0));
+                Luca.addItem(locations[1].removeItem(1));
+                Luca.addItem(locations[2].removeItem(0));
+                Luca.addItem(locations[3].removeItem(0));
+                Luca.addItem(locations[6].removeItem(0));
+                Luca.addItem(locations[6].removeItem(1));
+                Luca.addItem(locations[6].removeItem(2));
+                Luca.addItem(locations[7].removeItem(0));
+                Luca.addItem(locations[10].removeItem(0));
+                Luca.addItem(locations[18].removeItem(0));
+                Luca.addItem(locations[20].removeItem(0));
+            }
+            else if(compareIgnoreCase("end", dummy)) Luca._name = "Lucas";
+        }
+    }
     cout << "???: " << dummy << "? Let's see... gotcha. Your cognitive abilities don't seem to be compromised...  I sense that you want answers. I get it, but I must follow 'protocols.' "
                                 " Ethics and all that human rights junk. Bleeeeh. Boring, really, but hey, it's a living. Let's just test your sense of orientation. Then we'll talk." << endl;
     //Player mag(dummy, 1);
 
     Luca._name = dummy;
+
     prompt(cont);
     getline(cin, dummy);
-    getline(cin, dummy);
 
+
+
+    //TODO: skip tutorial if Boy from Nowhere
 
     //Begin tutorial
     if(tutorial()) {
@@ -754,6 +783,7 @@ bool init() {
     return copyright(Luca.getScore(), true);
 
 }
+
 
 int main() {
     while(init()) resetMain();
