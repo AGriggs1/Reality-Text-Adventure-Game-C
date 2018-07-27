@@ -612,6 +612,7 @@ bool tutorial() {
 }
 bool game() {
     bool completed = false;
+    bool movesReached = false;
     while(!completed) {
         string command;
         cout << locations[Luca.getLocale()].getLocationDescription() << endl;
@@ -664,6 +665,20 @@ bool game() {
         else if(Luca.getLocale() == ravine.getID() && ravineKills) {
             cout << ravine._longDescription << endl << "Baby: D'awwwww, did somebody find their mortality?";
             return false;
+        }
+
+        /*
+         *
+         */
+        //Moves limit reached
+        else if(Luca.getMoves() > 75 && !movesReached) {
+            cout << "Baby: Watching you is so TEDIOUS!\n";
+            if(Luca.getItemByIndex("KEY") > -1) cout << "Baby: Hurry up. Do not. Waste. My. Time.\n";
+            else {
+                cout << "Baby: I digress. Nap time!\n";
+                return false;
+            }
+            movesReached = true;
         }
         if(command == "No Luca no") completed = true; //Placeholder. Also reference ftw
     }
@@ -736,6 +751,7 @@ bool init() {
                 Luca.addItem(locations[10].removeItem(0));
                 Luca.addItem(locations[18].removeItem(0));
                 Luca.addItem(locations[20].removeItem(0));
+                Luca.addItem("KEY");
             }
             else if(compareIgnoreCase("Goto", dummy)) {
                 cout << "Baby: Where to, hon?" << endl;
