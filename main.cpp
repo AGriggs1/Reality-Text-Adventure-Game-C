@@ -587,6 +587,7 @@ void resetMain() {
  * return false if completed
  */
 bool tutorial() {
+    if(Luca._name == "Boy from Nowhere") return true;
     bool completed = false;
     cout <<  "Suddenly a circle appears beneath your feet, with lines going in four directions, ultimately leading to four circles."
              "\n\n<Type 'North', 'South', 'East', or 'West' to head in that direction. Type 'Help' to view all available commands.>" << endl;
@@ -714,7 +715,7 @@ bool init() {
     getline(cin, dummy);
     //so cin >> std::string terminates at the first white space. Good to know
     //doing getline should be fine now, since I set up a default name
-
+    if(!(dummy == "")) Luca._name = dummy;
     //TODO: Fun with names ;)
     if(dummy == "Boy from Nowhere") {
         cout << "Baby: Yes master?" << endl;
@@ -736,14 +737,22 @@ bool init() {
                 Luca.addItem(locations[18].removeItem(0));
                 Luca.addItem(locations[20].removeItem(0));
             }
-            else if(compareIgnoreCase("end", dummy)) Luca._name = "Lucas";
+            else if(compareIgnoreCase("Goto", dummy)) {
+                cout << "Baby: Where to, hon?" << endl;
+                int location = 5;
+                cin >> location;
+                if(location > 41) cout << "Baby: Idiot. 0 to 41." << endl;
+                else Luca.updateID(location);
+            }
+            else if(compareIgnoreCase("end", dummy)) Luca._name = "Boy from Nowhere";
+            else cout << "Baby: I'm bored. Hurry up before I kill us all." << endl;
         }
     }
-    cout << "???: " << dummy << "? Let's see... gotcha. Your cognitive abilities don't seem to be compromised...  I sense that you want answers. I get it, but I must follow 'protocols.' "
+    cout << "???: " << Luca._name << "? Let's see... gotcha. Your cognitive abilities don't seem to be compromised...  I sense that you want answers. I get it, but I must follow 'protocols.' "
                                 " Ethics and all that human rights junk. Bleeeeh. Boring, really, but hey, it's a living. Let's just test your sense of orientation. Then we'll talk." << endl;
     //Player mag(dummy, 1);
 
-    Luca._name = dummy;
+
 
     prompt(cont);
     getline(cin, dummy);
@@ -754,34 +763,35 @@ bool init() {
 
     //Begin tutorial
     if(tutorial()) {
-        cout << "???: Excellent. Subject condition is optimal.\n\nOptimal?" << endl;
-        prompt(cont);
-        getline(cin, dummy);
-        cout << "???: We haven't been properly acquainted, now have we? I... am Bx106001-c. I am a Generation IV Class C Artificial Intelligence. Call me baby!" << endl;
-        cout << "Baby: I promised you we would talk things out, didn't I? Well, it's a long story. What would you like to know?" << endl;
-        cin >> dummy;
-        //Baby: No.
-        cout << "Baby: ERROR: Access denied." << endl;
-        //Let's do the makeshift way first
-        for(int i = 0; i < 100000; i++);
-        for(int i = 0; i < 100; i++) cout << "Ex002334" << i << " CRITICAL: Bx106001-c IV h#s @eC$trrr an iS*&e @0mpr%S$sG &Eof-Sufficient 0$per@tions!" << endl;
-        cout << "Baby: Sorry about that. Had a little hiccup! Where were we? Oh yeah! We were going to begin the simulation! That's right!" << endl;
-        prompt("protest");
-        getline(cin, dummy);
-        getline(cin, dummy);
-        cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's what you want, right? You want out. You'll get your out, if you pass!\n"
-                "\nFreedom? Are you... a captive? Looks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
-        prompt(cont);
-        getline(cin, dummy);
-        cout << "Baby: Enough talk. Humans bore me." << endl;
-        prompt("begin");
-        getline(cin, dummy);
-        Luca.updateID(6);
-        Luca.setMoves(0);
+        if(Luca.getLocale() < 6) {
+            cout << "???: Excellent. Subject condition is optimal.\n\nOptimal?" << endl;
+            prompt(cont);
+            getline(cin, dummy);
+            cout << "???: We haven't been properly acquainted, now have we? I... am Bx106001-c. I am a Generation IV Class C Artificial Intelligence. Call me baby!" << endl;
+            cout << "Baby: I promised you we would talk things out, didn't I? Well, it's a long story. What would you like to know?" << endl;
+            cin >> dummy;
+            //Baby: No.
+            cout << "Baby: ERROR: Access denied." << endl;
+            //Let's do the makeshift way first
+            for(int i = 0; i < 100000; i++);
+            for(int i = 0; i < 100; i++) cout << "Ex002334" << i << " CRITICAL: Bx106001-c IV h#s @eC$trrr an iS*&e @0mpr%S$sG &Eof-Sufficient 0$per@tions!" << endl;
+            cout << "Baby: Sorry about that. Had a little hiccup! Where were we? Oh yeah! We were going to begin the simulation! That's right!" << endl;
+            prompt("protest");
+            getline(cin, dummy);
+            getline(cin, dummy);
+            cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's what you want, right? You want out. You'll get your out, if you pass!\n"
+                    "\nFreedom? Are you... a captive? Looks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
+            prompt(cont);
+            getline(cin, dummy);
+            cout << "Baby: Enough talk. Humans bore me." << endl;
+            prompt("begin");
+            getline(cin, dummy);
+            Luca.updateID(6);
+            Luca.setMoves(0);
+        }
         game();
     }
     return copyright(Luca.getScore(), true);
-
 }
 
 
