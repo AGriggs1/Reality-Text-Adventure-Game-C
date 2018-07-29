@@ -104,9 +104,20 @@ Locale watertop(26, "Following the river's current, you come across the top of a
 Locale elevator(27, "You shuffle through the ravine, coming to well, an elevator. Now, up... or down?", "You are in an elevator", "Nothing or note. There is a panel with an up and a down button, though.");
 Locale elevatorUp(28, "You press the up button. You feel your weight shift as the elevator makes it way upwards. It stops at a 'ding!' The doors slide open to reveal... a wall.", "You are in the elevator", "Where there's a wall, there's a room, right?");
 Locale chairoff(29, "You open the double doors, revealing a large furnished office. On the other side of the office is a desk, and behind that desk of a very large portrait of Bobbo the Clown. This is happening.", "You are in the furnished office.", "");
-Locale corridor1(30, "You open the double doors to reveal a long corridor, finding yourself at one of many intersections.", "You are at the north end of the corridor, standing at an intersection", "");
+Locale corridor1(30, "You open the double doors to reveal a long corridor, finding yourself at one of many intersections.", "You are at the north end of the corridor, standing at an intersection",
+                 "The floor beneath you is red. You see a pair of double doors all the way at the end of the corridor.");
 Locale corridor1E(31, "You head east in the intersection. You come to a door with a number on it", "You are in the east end of the intersection", "The number on the door is 50. There is a button with an arrow pointing north on it...");
 Locale corridor1W(32, "You head west in the intersection. You come to a door with a number on it", "You are in the west end of the intersection", "The number on the door is 45. There is a button with an arrow pointing south on it...");
+Locale corridor2(33, "You head down the corridor, stopping before the next intersection.", "You are in the long corridor", "On the east side, the wall has a '+' painted on it. The west side has a '-'.");
+Locale corridor3(34, "You continue to the next intersection.", "You are at an intersection.", "The floor beneath you is blue.");
+Locale corridor3E(35, "You head east in the intersection. There is a door with a number on it.", "You are in the east end of the intersection", "The number on the door is 42. You notice a button.");
+Locale corridor3W(36, "You walk west in the intersection. There is a door with a number on it.", "You are in the west end of the intersection.", "The number on the door is 51. There is a button by the door.");
+Locale corridor4(37, "You continue down the corridor, stopping before the next intersection.", "You are in the long corridor", "On the east side, the wall has a '-'. The west side has a '+'.");
+Locale corridor5(38, "You enter the last intersection of the corridor", "You are at the center of an intersection", "The floor beneath you is is green");
+Locale corridor5E(39, "You head east in the intersection. There is a door with a number on it.", "You are in the east end of an intersection.", "The number on the door is 40. There is a button with an arrow pointing south...");
+Locale corridor5W(40, "You head west in the intersection. There is a door with a number on it.", "You are in the west end of an intersection.", "The number on the door is 48. There is a button with an arrow pointing south...");
+Locale corridor6(41, "You reach the end of a corridor. There are a pair of doors in front of you.", "You are at an end of the corridor.", "The double has the numbers 46 on it. On each side of the walls, there is an '=' symbol.");
+
 //Create an array to act as a dictionary for the locales
 Locale na(-1, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
 //Also NULL doesn't work either because why would it?
@@ -115,7 +126,9 @@ Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW,
                         officeN, officeC, officeS, officeNE, officeE,
                         officeSE, hallway2, forest, river, lake, waterfall,
                         caveE, cave, deepCave, ravine, watertop, elevator,
-                        elevatorUp, chairoff, corridor1, corridor1E, corridor1W};
+                        elevatorUp, chairoff, corridor1, corridor1E, corridor1W,
+                        corridor2, corridor3, corridor3E, corridor3W, corridor4,
+                        corridor5, corridor5E, corridor5W, corridor6};
 //NavMat
         //navigator[localeID][iDirection] = Locale
                 //0 = North, 1 = South, 2 = East, 3 = West, 4 = Up, 5 = Down
@@ -151,9 +164,18 @@ Locale navigator[50][6] = {
         {na, na, na, na, elevatorUp, na}, //--------------elevator
         {na, na, na, na, na, elevator}, //----------------elevatorUp
         {na, na, na, na}, //-------------------------chairoff
-        {officeS, na, corridor1E, corridor1W}, //----------corridor1
-        {na, na, na, corridor1}, //------------------------corridor1E
-        {na, na, corridor1, na} //-------------------------corridor1W
+        {officeS, corridor2, corridor1E, corridor1W}, //---corridor1
+        {na, na, na, corridor1}, //-----------------------corridor1E
+        {na, na, corridor1, na}, //-----------------------corridor1W
+        {corridor1, corridor3, na, na}, //----------------corridor2
+        {corridor2, corridor4, corridor3E, corridor3W}, //corridor3
+        {na, na, na, corridor3}, //-----------------------corridor3E
+        {na, na, corridor3, na}, //-----------------------corridor3W
+        {corridor3, corridor5, na, na}, //----------------corridor4
+        {corridor4, corridor6, corridor5E, corridor5W}, //corridor5
+        {na, na, na, corridor5}, //-----------------------corridor5E
+        {na, na, corridor5, na}, //-----------------------corridor5W
+        {corridor5, na, na, na} //------------------------corridor6
 
 };
 Player Luca("Lucas", 1);
