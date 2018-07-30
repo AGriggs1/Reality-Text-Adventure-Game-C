@@ -163,7 +163,7 @@ Locale navigator[50][6] = {
         {na, na, river, waterfall}, //--------------------watertop
         {na, na, na, na, elevatorUp, na}, //--------------elevator
         {na, na, na, na, na, elevator}, //----------------elevatorUp
-        {na, na, na, na}, //-------------------------chairoff
+        {na, corridor6, na, na}, //-------------------------chairoff
         {officeS, corridor2, corridor1E, corridor1W}, //---corridor1
         {na, na, na, corridor1}, //-----------------------corridor1E
         {na, na, corridor1, na}, //-----------------------corridor1W
@@ -244,7 +244,7 @@ void prompt(string keyword) {
 }
 /*
  * makeUpper
- * Takes in a string and converts all characters to be in upppercase
+ * Takes in a string and converts all characters to be in uppercase
  */
 string makeUpper(string cappy) {
     string CAPPY;
@@ -394,7 +394,25 @@ string mapDiction[50] = {"", "", "", "", "", "", "a", "b", "c1", "c2", "c3", "C"
 string use(int localeID, string item) {
     //The player must have the item to use it, naturally
     string message = "You do not have any " + item;
-    if(Luca.getItemByIndex(item) == -1) return message;
+    if(compareIgnoreCase("button", item)) {
+        //Move the east sides north 1
+        if(localeID == navigator[corridor1.getID()][2].getID()) {
+            //Location at corridor1E to corridor5E
+            Locale p = navigator[corridor5.getID()][2];
+            replaceLocation(corridor5.getID(), 2, navigator[corridor1.getID()][2]);
+            //Make it so the new location at 5E leads to corridor5
+            replaceLocation(navigator[corridor5.getID()][2].getID(), 3, corridor5);
+            //Location at corridor3E to corridor1E
+            replaceLocation(corridor1.getID(), 2, navigator[corridor3.getID()][2]);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor1);
+            //Location at corridor5E to corridor3E
+            replaceLocation(corridor3.getID(), 2, p);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor3);
+            return "Ding!";
+        }
+        else return "Button?";
+    }
+    else if(Luca.getItemByIndex(item) == -1) return message;
     message = "Cannot use the " + item + " here.";
     //Flashlight
     if(compareIgnoreCase(item, "flashlight")) {
@@ -468,6 +486,7 @@ string use(int localeID, string item) {
         if(locations[forest.getID()]._searched) return bigMap + "\nYou are at: " + mapDiction[localeID];
         return map + "\nYou are at: " + mapDiction[localeID];
     }
+
     //TODO: corridor buttons
     return "Could not find item " + item;
 }
@@ -584,7 +603,7 @@ void decipher(string command) {
  */
 void resetMain() {
     copyNav(true);
-    for(int i = 0; i < 26; i++) locations[i].reset();
+    for(int i = 0; i < 41; i++) locations[i].reset();
     Luca.updateID(1);
     Luca.updateScore(-Luca.getScore());
     Luca.setMoves(0);
