@@ -410,6 +410,19 @@ string use(int localeID, string item) {
             replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor3);
             return "Ding!";
         }
+        //Switch middles
+        else if(localeID == navigator[corridor3.getID()][2].getID() || localeID == navigator[corridor3.getID()][3].getID()) {
+            Locale p = navigator[corridor3.getID()][2];
+            //West to east
+            replaceLocation(corridor3.getID(), 2, navigator[corridor3.getID()][3]);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 2, na);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor3);
+            //East to west
+            replaceLocation(corridor3.getID(), 3, p);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor3);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 3, na);
+            return "Ding-Dong!";
+        }
         else return "Button?";
     }
     else if(Luca.getItemByIndex(item) == -1) return message;
