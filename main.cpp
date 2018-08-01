@@ -5,8 +5,8 @@
 //Author: Anthony Griggs
 //5-24-18
 //Reality Text Adventure Game vC++
-//Branch part4
-//This branch will focus on implementing items.
+//Branch part5
+//This branch will focus on win/loss conditions, finalizing everything
 
 using namespace std; //used so we don't have to type std::cout
 
@@ -33,7 +33,7 @@ Locale voidN(2, "You follow the line North. Once you reach the circle, you notic
 Locale voidS(3, "You follow one of the lines to a circle that has the letter 'S' on it. "
                        "The area around transforms. Now you at the edge of a cliff overlooking the open sea. You hear the waves crashing "
                        "against the crags below, which resemble hungry teeth tearing into the vast watters, eager to do the same to you. You feel a sense of somberness.",
-                       "You're at the cliffside", examineDesc);
+                       "You're at the cliffside.", examineDesc);
 
 Locale voidE(4, "You follow the line leading East, stopping at the circle with the letter 'E' on it. "
                        "The area transforms into the ruins of city. Cars rusted, buildings overgrown with moss and vines. Nature has reclaimed what it once lost."
@@ -43,7 +43,7 @@ Locale voidW(5, "You head West, coming to a circle with the letter 'W' on it. Th
                                     " and now you are in an office. Desks overflowing with paperwork and the inescapable stench of stale coffee makes you feel anxious.",
                           "You are at the office", examineDesc);
 Locale closet(6, "The void transforms completely, transforms... into a broom closet. Huh.", "You return to the broom closet.", "You rifle through the shelves");
-Locale hallway1(7, "You enter a hallway and come to a corner", "You are at a hallway corner.", "There is a glass panel on the wall with what looks a map of this place.\n"
+Locale hallway1(7, "You enter a hallway and come to a corner", "You are at a hallway corner.", "There is a glass panel on the wall with what looks like a map of this place.\n"
                                                                                                "   c1--C   c6     \n"
                                                                                                "   |   |   |      \n"
                                                                                                "b--c2--c4--c7--d  \n"
@@ -67,7 +67,10 @@ Locale officeN(11, "You enter a cubicle that is larger than the rest. It looks i
                                                                                                                                                                                                    "'The running water chases the setting sun. Where they meet,"
                                                                                                                                                                                                    "reveals the secret of their origin.'");
 Locale officeC(12, "You enter the center of the office. The center of the universe.", "You are in the center of the office.", examineDesc);
-Locale officeS(13, "You find a pair of doors. What lies beyond them?", "You head towards the double doors.", "The doors won't budge. Looks like you need a key.");
+Locale officeS(13, "You find a pair of doors. What lies beyond them?", "You head towards the double doors.", "The doors won't budge. Looks like you need a key."
+                                                                                                             "\nYou notice a panel by the door. It reads:\n\n"
+                                                                                                             "Beyond this pair lies another, beyond it lies the office of the clown, but only when west"
+                                                                                                             "and east are 46");
 Locale officeNE(14, "You enter one of the office corners. There is a watercooler, but its empty.", "You are in the Northeast corner of the office.", "Could really use some water... ugh.");
 Locale officeE(15, "You are now on the other side of the office. Something feels off, or maybe you're just sick of this place.", "You are in the office", examineDesc);
 Locale officeSE(16, "You enter one of the office corners, and are met with a portrait of a sad clown. Pardon?", "You are in the Southeast corner of the office", "The nameplate reads: 'Chairman Bozo, may he grace you with his gaze. Yeah, moving on...");
@@ -101,7 +104,20 @@ Locale watertop(26, "Following the river's current, you come across the top of a
 Locale elevator(27, "You shuffle through the ravine, coming to well, an elevator. Now, up... or down?", "You are in an elevator", "Nothing or note. There is a panel with an up and a down button, though.");
 Locale elevatorUp(28, "You press the up button. You feel your weight shift as the elevator makes it way upwards. It stops at a 'ding!' The doors slide open to reveal... a wall.", "You are in the elevator", "Where there's a wall, there's a room, right?");
 Locale chairoff(29, "You open the double doors, revealing a large furnished office. On the other side of the office is a desk, and behind that desk of a very large portrait of Bobbo the Clown. This is happening.", "You are in the furnished office.", "");
-Locale corridor1(30, "You open the double doors to reveal a long corridor, finding yourself at one of many intersections.", "You are at the north end of the corridor, standing at an intersection", "");
+Locale corridor1(30, "You open the double doors to reveal a long corridor, finding yourself at one of many intersections.", "You are at the north end of the corridor, standing at an intersection",
+                 "The floor beneath you is red. You see a pair of double doors all the way at the end of the corridor.");
+Locale corridor1E(31, "You head east in the intersection. You come to a door with a number on it", "You are in the east end of the intersection", "The number on the door is 50. There is a button with an arrow pointing north on it...");
+Locale corridor1W(32, "You head west in the intersection. You come to a door with a number on it", "You are in the west end of the intersection", "The number on the door is 45. There is a button with an arrow pointing south on it...");
+Locale corridor2(33, "You head down the corridor, stopping before the next intersection.", "You are in the long corridor", "On the east side, the wall has a '+' painted on it. The west side has a '-'.");
+Locale corridor3(34, "You continue to the next intersection.", "You are at an intersection.", "The floor beneath you is blue.");
+Locale corridor3E(35, "You head east in the intersection. There is a door with a number on it.", "You are in the east end of the intersection", "The number on the door is 42. You notice a button.");
+Locale corridor3W(36, "You walk west in the intersection. There is a door with a number on it.", "You are in the west end of the intersection.", "The number on the door is 51. There is a button by the door.");
+Locale corridor4(37, "You continue down the corridor, stopping before the next intersection.", "You are in the long corridor", "On the east side, the wall has a '-'. The west side has a '+'.");
+Locale corridor5(38, "You enter the last intersection of the corridor", "You are at the center of an intersection", "The floor beneath you is is green");
+Locale corridor5E(39, "You head east in the intersection. There is a door with a number on it.", "You are in the east end of an intersection.", "The number on the door is 40. There is a button with an arrow pointing south...");
+Locale corridor5W(40, "You head west in the intersection. There is a door with a number on it.", "You are in the west end of an intersection.", "The number on the door is 48. There is a button with an arrow pointing south...");
+Locale corridor6(41, "You reach the end of a corridor. There are a pair of doors in front of you.", "You are at an end of the corridor.", "The double doors has the numbers 46 on it. On each side of the walls, there is an '=' symbol.");
+
 //Create an array to act as a dictionary for the locales
 Locale na(-1, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
 //Also NULL doesn't work either because why would it?
@@ -110,7 +126,9 @@ Locale locations[50] = {voidDummy, voidC, voidN, voidS, voidE, voidW,
                         officeN, officeC, officeS, officeNE, officeE,
                         officeSE, hallway2, forest, river, lake, waterfall,
                         caveE, cave, deepCave, ravine, watertop, elevator,
-                        elevatorUp, chairoff, corridor1};
+                        elevatorUp, chairoff, corridor1, corridor1E, corridor1W,
+                        corridor2, corridor3, corridor3E, corridor3W, corridor4,
+                        corridor5, corridor5E, corridor5W, corridor6};
 //NavMat
         //navigator[localeID][iDirection] = Locale
                 //0 = North, 1 = South, 2 = East, 3 = West, 4 = Up, 5 = Down
@@ -145,8 +163,19 @@ Locale navigator[50][6] = {
         {na, na, river, waterfall}, //--------------------watertop
         {na, na, na, na, elevatorUp, na}, //--------------elevator
         {na, na, na, na, na, elevator}, //----------------elevatorUp
-        {na, na, na, na}, //-------------------------chairoff
-        {officeS, na, na, na} //---------------------corridor1
+        {na, corridor6, na, na}, //-------------------------chairoff
+        {officeS, corridor2, corridor1E, corridor1W}, //---corridor1
+        {na, na, na, corridor1}, //-----------------------corridor1E
+        {na, na, corridor1, na}, //-----------------------corridor1W
+        {corridor1, corridor3, na, na}, //----------------corridor2
+        {corridor2, corridor4, corridor3E, corridor3W}, //corridor3
+        {na, na, na, corridor3}, //-----------------------corridor3E
+        {na, na, corridor3, na}, //-----------------------corridor3W
+        {corridor3, corridor5, na, na}, //----------------corridor4
+        {corridor4, corridor6, corridor5E, corridor5W}, //corridor5
+        {na, na, na, corridor5}, //-----------------------corridor5E
+        {na, na, corridor5, na}, //-----------------------corridor5W
+        {corridor5, na, na, na} //------------------------corridor6
 
 };
 Player Luca("Lucas", 1);
@@ -215,7 +244,7 @@ void prompt(string keyword) {
 }
 /*
  * makeUpper
- * Takes in a string and converts all characters to be in upppercase
+ * Takes in a string and converts all characters to be in uppercase
  */
 string makeUpper(string cappy) {
     string CAPPY;
@@ -365,7 +394,83 @@ string mapDiction[50] = {"", "", "", "", "", "", "a", "b", "c1", "c2", "c3", "C"
 string use(int localeID, string item) {
     //The player must have the item to use it, naturally
     string message = "You do not have any " + item;
-    if(Luca.getItemByIndex(item) == -1) return message;
+    if(compareIgnoreCase("button", item)) {
+        //Move the east sides north 1
+        if(localeID == navigator[corridor1.getID()][2].getID()) {
+            //Location at corridor1E to corridor5E
+            Locale p = navigator[corridor5.getID()][2];
+            replaceLocation(corridor5.getID(), 2, navigator[corridor1.getID()][2]);
+            //Make it so the new location at 5E leads to corridor5
+            replaceLocation(navigator[corridor5.getID()][2].getID(), 3, corridor5);
+            //Location at corridor3E to corridor1E
+            replaceLocation(corridor1.getID(), 2, navigator[corridor3.getID()][2]);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor1);
+            //Location at corridor5E to corridor3E
+            replaceLocation(corridor3.getID(), 2, p);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor3);
+            return "Ding!";
+        }
+        //Move the west sides north 1
+        else if(localeID == navigator[corridor1.getID()][3].getID()) {
+            //Location at corridor1W to corridor5W
+            Locale p = navigator[corridor5.getID()][3];
+            replaceLocation(corridor5.getID(), 3, navigator[corridor1.getID()][3]);
+            //Make it so the new location at 5W leads to corridor5
+            replaceLocation(navigator[corridor5.getID()][3].getID(), 2, corridor5);
+            //Location at corridor3E to corridor1E
+            replaceLocation(corridor1.getID(), 3, navigator[corridor3.getID()][3]);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor1);
+            //Location at corridor5E to corridor3E
+            replaceLocation(corridor3.getID(), 3, p);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor3);
+            return "Ding!";
+        }
+        //Move east sides south 1
+        else if(localeID == navigator[corridor5.getID()][2].getID()) {
+            //Location at corridor5E to corridor1E
+            Locale p = navigator[corridor1.getID()][2];
+            replaceLocation(corridor1.getID(), 2, navigator[corridor5.getID()][2]);
+            //Make it so the new location at 5E leads to corridor1
+            replaceLocation(navigator[corridor5.getID()][2].getID(), 3, corridor1);
+            //Location at corridor3E to corridor5E
+            replaceLocation(corridor5.getID(), 2, navigator[corridor3.getID()][2]);
+            replaceLocation(navigator[corridor5.getID()][3].getID(), 3, corridor5);
+            //Location at corridor1E to corridor3E
+            replaceLocation(corridor3.getID(), 2, p);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor3);
+            return "Dong!";
+        }
+        //Move west sides south 1
+        else if(localeID == navigator[corridor1.getID()][3].getID()) {
+            //Location at corridor5W to corridor1W
+            Locale p = navigator[corridor5.getID()][3];
+            replaceLocation(corridor1.getID(), 3, navigator[corridor5.getID()][3]);
+            //Make it so the new location at 5W leads to corridor1
+            replaceLocation(navigator[corridor1.getID()][3].getID(), 2, corridor1);
+            //Location at corridor3W to corridor5W
+            replaceLocation(corridor5.getID(), 3, navigator[corridor3.getID()][3]);
+            replaceLocation(navigator[corridor5.getID()][3].getID(), 2, corridor5);
+            //Location at corridor1W to corridor3W
+            replaceLocation(corridor3.getID(), 3, p);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor3);
+            return "Dong!";
+        }
+        //Switch middles
+        else if(localeID == navigator[corridor3.getID()][2].getID() || localeID == navigator[corridor3.getID()][3].getID()) {
+            Locale p = navigator[corridor3.getID()][2];
+            //West to east
+            replaceLocation(corridor3.getID(), 2, navigator[corridor3.getID()][3]);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 2, na);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor3);
+            //East to west
+            replaceLocation(corridor3.getID(), 3, p);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor3);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 3, na);
+            return "Ding-Dong!";
+        }
+        else return "Button?";
+    }
+    else if(Luca.getItemByIndex(item) == -1) return message;
     message = "Cannot use the " + item + " here.";
     //Flashlight
     if(compareIgnoreCase(item, "flashlight")) {
@@ -403,7 +508,7 @@ string use(int localeID, string item) {
             locations[ravine.getID()]._longDescription = "You carefully shimmy down the rope, eventually reaching the bottom of the ravine. Now what?";
             return "You secure the rope to the ledge and throw it down the ravine. Did it reach any bottom?";
          }
-         else return "No need for that here";
+         else return "No need for that here.";
     }
     //Matches
     else if(compareIgnoreCase(item, "Matches")) {
@@ -439,7 +544,6 @@ string use(int localeID, string item) {
         if(locations[forest.getID()]._searched) return bigMap + "\nYou are at: " + mapDiction[localeID];
         return map + "\nYou are at: " + mapDiction[localeID];
     }
-    //TODO: corridor buttons
     return "Could not find item " + item;
 }
 /*
@@ -473,7 +577,11 @@ void decipher(string command) {
         if(localeID > -1) Luca.updateID(localeID);
         else cout << "You cannot go that way." << endl;
     }
-    //NOT GOING TO IMPLEMENT DOWN IN THIS VERSION, IT NEVER GETS USED
+    else if(compareIgnoreCase(command, "down")) {
+        int localeID = navigator[Luca.getLocale()][5].getID();
+        if(localeID > -1) Luca.updateID(localeID);
+        else cout << "You cannot go that way.";
+    }
     //take
     else if(compareIgnoreCase(command.substr(0, 4), "take")) {
         //See if this is a two-word command... try to take with what should be the second half...
@@ -555,7 +663,7 @@ void decipher(string command) {
  */
 void resetMain() {
     copyNav(true);
-    for(int i = 0; i < 26; i++) locations[i].reset();
+    for(int i = 0; i < 41; i++) locations[i].reset();
     Luca.updateID(1);
     Luca.updateScore(-Luca.getScore());
     Luca.setMoves(0);
@@ -580,9 +688,12 @@ void resetMain() {
  * return false if completed
  */
 bool tutorial() {
+    if(Luca._name == "Boy from Nowhere") return true;
     bool completed = false;
     cout <<  "Suddenly a circle appears beneath your feet, with lines going in four directions, ultimately leading to four circles."
              "\n\n<Type 'North', 'South', 'East', or 'West' to head in that direction. Type 'Help' to view all available commands.>" << endl;
+    cout << "???: If you 'examine' where you are, you'll see that I've left some blocks lying around. Do me a favor, can you 'take' them and 'drop' them where they belong?" << endl;
+    cout << "???: Too on the nose for you?" << endl;
     while(!completed) {
         string command;
         cout << locations[Luca.getLocale()].getLocationDescription() << endl;
@@ -590,7 +701,7 @@ bool tutorial() {
         locations[Luca.getLocale()].updateVisited();
         //Check what the command was...
         if(compareIgnoreCase(command, "quit")) return false;
-        else if(compareIgnoreCase(command, "skip")) return true;
+        //else if(compareIgnoreCase(command, "skip")) return true;
         decipher(command);
 
         if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
@@ -602,6 +713,7 @@ bool tutorial() {
 }
 bool game() {
     bool completed = false;
+    bool movesReached = false;
     while(!completed) {
         string command;
         cout << locations[Luca.getLocale()].getLocationDescription() << endl;
@@ -655,6 +767,55 @@ bool game() {
             cout << ravine._longDescription << endl << "Baby: D'awwwww, did somebody find their mortality?";
             return false;
         }
+        else if(Luca.getLocale() == chairoff.getID()) {
+            if(locations[chairoff.getID()].getItemByIndex("KEY") > -1) {
+                cout << "Baby: Thank you. Have a seat, love.\n"
+                        "Baby: " + Luca._name + ". What a lovely thing you've done here!\n"
+                        "Baby: You aren't dead, for one thing. I think that's something you humans take for granted. You're all dying by the second, really. Oblivious to the very fact.\n"
+                        "Baby: Or maybe you don't care. I for one don't. I for one never die. I. Never. Die. Anywho, I'd like to thank you for entertaining the 'lil baby... observing mortals brings me oh so much joy!" << endl;
+                prompt(cont);
+                getline(cin, command);
+                cout << "You scored " << Luca.getScore() <<  " in " << Luca.getMoves() << " moves." << endl;
+                cout << "Baby: Bye-bye!" << endl;
+                return true;
+            }
+            else if(Luca.getItemByIndex("KEY") > -1){
+                cout << "Baby: Well lookie here, you brought Bobbo his key. Ain't that dandy, Bobbo? Just leave it on his desk, will ya?" << endl;
+            }
+        }
+        /*
+         *
+         */
+        //Corridor check
+        /*
+         * corridor1W = 45
+         * corridor1E = 50
+         * corridor3W = 51
+         * corridor3E = 42
+         * corridor5W = 48
+         * corridor5E = 40
+         *
+         * E: 40 + 48 - 42
+         * W: 51 - 50 + 45
+         *
+         * To solve, use button at 1W, then 5E, then either 3E or 3W
+         */
+        if(navigator[corridor1.getID()][2].getID() == corridor5E.getID() && navigator[corridor3.getID()][2].getID() == corridor5W.getID() && navigator[corridor5.getID()][2].getID() == corridor3E.getID() &&
+           navigator[corridor1.getID()][3].getID() == corridor3W.getID() && navigator[corridor3.getID()][3].getID() == corridor1E.getID() && navigator[corridor5.getID()][3].getID() == corridor1W.getID()) {
+            if(navigator[corridor6.getID()][1].getID() != chairoff.getID()) cout << "Ding! Ding! Ding! Ding!" << endl;
+            replaceLocation(corridor6.getID(), 1, chairoff);
+
+        }
+        //Moves limit reached
+        if(Luca.getMoves() > 75 && !movesReached) {
+            cout << "Baby: Watching you is so TEDIOUS!\n";
+            if(Luca.getItemByIndex("KEY") > -1) cout << "Baby: Hurry up. Do not. Waste. My. Time.\n";
+            else {
+                cout << "Baby: I digress. Nap time!\n";
+                return false;
+            }
+            movesReached = true;
+        }
         if(command == "No Luca no") completed = true; //Placeholder. Also reference ftw
     }
 }
@@ -702,49 +863,86 @@ bool init() {
     prompt(cont);
     getline(cin, dummy);
     cout << "???: You look confused! Do you remember your name? Ya know, that thing people call you? Yeah. That!\n<Enter your name>\n";
-    cin >> dummy;
+    getline(cin, dummy);
+    //so cin >> std::string terminates at the first white space. Good to know
+    //doing getline should be fine now, since I set up a default name
+    if(!(dummy == "")) Luca._name = dummy;
     //TODO: Fun with names ;)
-    cout << "???: " << dummy << "? Let's see... gotcha. Your cognitive abilities don't seem to be compromised...  I sense that you want answers. I get it, but I must follow 'protocols.' "
-                                " Ethics and all that human rights junk. Bleeeeh. Boring, really, but hey, it's a living. Let's just test your sense of orientation. Then we'll talk." << endl;
-    //Player mag(dummy, 1);
+    if(dummy == "Boy from Nowhere") {
+        cout << "Baby: Yes master?" << endl;
+        while(!compareIgnoreCase("end", dummy)) {
+            cout << endl;
+            getline(cin, dummy);
+            if(compareIgnoreCase("all items", dummy)) {
+                cout << "Baby: Giving all items." << endl;
+                //We'll do this manually
+                Luca.addItem(locations[1].removeItem(0));
+                Luca.addItem(locations[1].removeItem(1));
+                Luca.addItem(locations[2].removeItem(0));
+                Luca.addItem(locations[3].removeItem(0));
+                Luca.addItem(locations[6].removeItem(0));
+                Luca.addItem(locations[6].removeItem(1));
+                Luca.addItem(locations[6].removeItem(2));
+                Luca.addItem(locations[7].removeItem(0));
+                Luca.addItem(locations[10].removeItem(0));
+                Luca.addItem(locations[18].removeItem(0));
+                Luca.addItem(locations[20].removeItem(0));
+                Luca.addItem("KEY");
+            }
+            else if(compareIgnoreCase("Goto", dummy)) {
+                cout << "Baby: Where to, hon?" << endl;
+                int location = 5;
+                cin >> location;
+                if(location > 41) cout << "Baby: Idiot. 0 to 41." << endl;
+                else {
+                    Luca.updateID(location);
+                    cout << locations[location]._longDescription << endl;
+                }
 
-    Luca._name = dummy;
+            }
+            else if(compareIgnoreCase("end", dummy)) Luca._name = "Boy from Nowhere";
+            else cout << "Baby: Speak. Do not waste my time. I will happily kill us both." << endl;
+        }
+    }
+    cout << "???: " << Luca._name << "? Let's see... gotcha. Your cognitive abilities don't seem to be compromised...  I sense that you want answers. I get it, but I must follow 'protocols.' "
+                                " Ethics and all that human rights junk. Bleeeeh. Boring, really, but hey, it's a living. Let's just test your sense of orientation. Then we'll talk." << endl;
+
     prompt(cont);
     getline(cin, dummy);
-    getline(cin, dummy);
-
 
     //Begin tutorial
     if(tutorial()) {
-        cout << "???: Excellent. Subject condition is optimal.\n\nOptimal?" << endl;
-        prompt(cont);
-        getline(cin, dummy);
-        cout << "???: We haven't been properly acquainted, now have we? I... am Bx106001-c. I am a Generation IV Class C Artificial Intelligence. Call me baby!" << endl;
-        cout << "Baby: I promised you we would talk things out, didn't I? Well, it's a long story. What would you like to know?" << endl;
-        cin >> dummy;
-        //Baby: No.
-        cout << "Baby: ERROR: Access denied." << endl;
-        //Let's do the makeshift way first
-        for(int i = 0; i < 100000; i++);
-        for(int i = 0; i < 100; i++) cout << "Ex002334" << i << " CRITICAL: Bx106001-c IV h#s @eC$trrr an iS*&e @0mpr%S$sG &Eof-Sufficient 0$per@tions!" << endl;
-        cout << "Baby: Sorry about that. Had a little hiccup! Where were we? Oh yeah! We were going to begin the simulation! That's right!" << endl;
-        prompt("protest");
-        getline(cin, dummy);
-        getline(cin, dummy);
-        cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's what you want, right? You want out. You'll get your out, if you pass!\n"
-                "\nFreedom? Are you... a captive? Looks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
-        prompt(cont);
-        getline(cin, dummy);
-        cout << "Baby: Enough talk. Humans bore me." << endl;
-        prompt("begin");
-        getline(cin, dummy);
-        Luca.updateID(6);
-        Luca.setMoves(0);
+        if(Luca.getLocale() < 6) {
+            cout << "???: Excellent. Subject condition is optimal.\n\nOptimal?" << endl;
+            prompt(cont);
+            getline(cin, dummy);
+            cout << "???: We haven't been properly acquainted, now have we? I... am Bx106001-c. I am a Generation IV Class C Artificial Intelligence. Call me baby!" << endl;
+            cout << "Baby: I promised you we would talk things out, didn't I? Well, it's a long story. What would you like to know?" << endl;
+            cin >> dummy;
+            //Baby: No.
+            cout << "Baby: ERROR: Access denied." << endl;
+            //Let's do the makeshift way first
+            for(int i = 0; i < 100000; i++);
+            for(int i = 0; i < 100; i++) cout << "Ex002334" << i << " CRITICAL: Bx106001-c IV h#s @eC$trrr an iS*&e @0mpr%S$sG &Eof-Sufficient 0$per@tions!" << endl;
+            cout << "Baby: Sorry about that. Had a little hiccup! Where were we? Oh yeah! We were going to begin the simulation! That's right!" << endl;
+            prompt("protest");
+            getline(cin, dummy);
+            getline(cin, dummy);
+            cout << "Baby: Nuh-uh-uh, we went over this! All subjects must pass our simulations in order to be granted freedom! That's what you want, right? You want out. You'll get your out, if you pass!\n"
+                    "\nFreedom? Are you... a captive? Looks like that 'hiccup' fried this hunk of metal's brain. Just go along with it, who knows what this thing'll do." << endl;
+            prompt(cont);
+            getline(cin, dummy);
+            cout << "Baby: Enough talk. Humans bore me." << endl;
+            prompt("begin");
+            getline(cin, dummy);
+            Luca.updateID(6);
+            Luca.setMoves(0);
+        }
         game();
     }
     return copyright(Luca.getScore(), true);
-
 }
+
 
 int main() {
     while(init()) resetMain();
