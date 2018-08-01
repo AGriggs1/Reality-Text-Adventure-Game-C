@@ -701,7 +701,7 @@ bool tutorial() {
         locations[Luca.getLocale()].updateVisited();
         //Check what the command was...
         if(compareIgnoreCase(command, "quit")) return false;
-        else if(compareIgnoreCase(command, "skip")) return true;
+        //else if(compareIgnoreCase(command, "skip")) return true;
         decipher(command);
 
         if(!locations[Luca.getLocale()].getVisited()) Luca.updateScore(5);
@@ -776,10 +776,10 @@ bool game() {
                 prompt(cont);
                 getline(cin, command);
                 cout << "You scored " << Luca.getScore() <<  " in " << Luca.getMoves() << " moves." << endl;
-                cout << "Baby: Bye-bye!";
+                cout << "Baby: Bye-bye!" << endl;
                 return true;
             }
-            else {
+            else if(Luca.getItemByIndex("KEY") > -1){
                 cout << "Baby: Well lookie here, you brought Bobbo his key. Ain't that dandy, Bobbo? Just leave it on his desk, will ya?" << endl;
             }
         }
@@ -802,8 +802,9 @@ bool game() {
          */
         if(navigator[corridor1.getID()][2].getID() == corridor5E.getID() && navigator[corridor3.getID()][2].getID() == corridor5W.getID() && navigator[corridor5.getID()][2].getID() == corridor3E.getID() &&
            navigator[corridor1.getID()][3].getID() == corridor3W.getID() && navigator[corridor3.getID()][3].getID() == corridor1E.getID() && navigator[corridor5.getID()][3].getID() == corridor1W.getID()) {
+            if(navigator[corridor6.getID()][1].getID() != chairoff.getID()) cout << "Ding! Ding! Ding! Ding!" << endl;
             replaceLocation(corridor6.getID(), 1, chairoff);
-           cout << "Ding! Ding! Ding! Ding!" << endl;
+
         }
         //Moves limit reached
         if(Luca.getMoves() > 75 && !movesReached) {
