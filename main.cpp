@@ -428,28 +428,28 @@ string use(int localeID, string item) {
         //Move east sides south 1
         else if(localeID == navigator[corridor5.getID()][2].getID()) {
             //Location at corridor5E to corridor1E
-            Locale p = navigator[corridor5.getID()][2];
-            replaceLocation(corridor5.getID(), 2, navigator[corridor1.getID()][2]);
+            Locale p = navigator[corridor1.getID()][2];
+            replaceLocation(corridor1.getID(), 2, navigator[corridor5.getID()][2]);
             //Make it so the new location at 5E leads to corridor1
             replaceLocation(navigator[corridor5.getID()][2].getID(), 3, corridor1);
             //Location at corridor3E to corridor5E
             replaceLocation(corridor5.getID(), 2, navigator[corridor3.getID()][2]);
-            replaceLocation(navigator[corridor3.getID()][3].getID(), 3, corridor5);
+            replaceLocation(navigator[corridor5.getID()][3].getID(), 3, corridor5);
             //Location at corridor1E to corridor3E
             replaceLocation(corridor3.getID(), 2, p);
             replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor3);
             return "Dong!";
         }
-        //Move west sides down 1
-        else if(localeID == navigator[corridor5.getID()][3].getID()) {
+        //Move west sides south 1
+        else if(localeID == navigator[corridor1.getID()][3].getID()) {
             //Location at corridor5W to corridor1W
             Locale p = navigator[corridor5.getID()][3];
-            replaceLocation(corridor5.getID(), 3, navigator[corridor1.getID()][3]);
+            replaceLocation(corridor1.getID(), 3, navigator[corridor5.getID()][3]);
             //Make it so the new location at 5W leads to corridor1
-            replaceLocation(navigator[corridor5.getID()][3].getID(), 2, corridor1);
+            replaceLocation(navigator[corridor1.getID()][3].getID(), 2, corridor1);
             //Location at corridor3W to corridor5W
             replaceLocation(corridor5.getID(), 3, navigator[corridor3.getID()][3]);
-            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor5);
+            replaceLocation(navigator[corridor5.getID()][3].getID(), 2, corridor5);
             //Location at corridor1W to corridor3W
             replaceLocation(corridor3.getID(), 3, p);
             replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor3);
@@ -508,7 +508,7 @@ string use(int localeID, string item) {
             locations[ravine.getID()]._longDescription = "You carefully shimmy down the rope, eventually reaching the bottom of the ravine. Now what?";
             return "You secure the rope to the ledge and throw it down the ravine. Did it reach any bottom?";
          }
-         else return "No need for that here";
+         else return "No need for that here.";
     }
     //Matches
     else if(compareIgnoreCase(item, "Matches")) {
@@ -544,8 +544,6 @@ string use(int localeID, string item) {
         if(locations[forest.getID()]._searched) return bigMap + "\nYou are at: " + mapDiction[localeID];
         return map + "\nYou are at: " + mapDiction[localeID];
     }
-
-    //TODO: corridor buttons
     return "Could not find item " + item;
 }
 /*
@@ -765,12 +763,30 @@ bool game() {
             cout << ravine._longDescription << endl << "Baby: D'awwwww, did somebody find their mortality?";
             return false;
         }
-
         /*
          *
          */
+        //Corridor check
+        /*
+         * corridor1W = 45
+         * corridor1E = 50
+         * corridor3W = 51
+         * corridor3E = 42
+         * corridor5W = 48
+         * corridor5E = 40
+         *
+         * E: 40 + 48 - 42
+         * W: 51 - 50 + 45
+         *
+         * To solve, use button at 1W, then 5E, then either 3E or 3W
+         */
+        if(navigator[corridor1.getID()][2].getID() == corridor5E.getID() && navigator[corridor3.getID()][2].getID() == corridor5W.getID() && navigator[corridor5.getID()][2].getID() == corridor3E.getID() &&
+           navigator[corridor1.getID()][3].getID() == corridor3W.getID() && navigator[corridor3.getID()][3].getID() == corridor1E.getID() && navigator[corridor5.getID()][3].getID() == corridor1W.getID()) {
+            replaceLocation(corridor6.getID(), 1, chairoff);
+           cout << "Ding! Ding! Ding! Ding!" << endl;
+        }
         //Moves limit reached
-        else if(Luca.getMoves() > 75 && !movesReached) {
+        if(Luca.getMoves() > 75 && !movesReached) {
             cout << "Baby: Watching you is so TEDIOUS!\n";
             if(Luca.getItemByIndex("KEY") > -1) cout << "Baby: Hurry up. Do not. Waste. My. Time.\n";
             else {
