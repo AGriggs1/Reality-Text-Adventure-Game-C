@@ -116,7 +116,7 @@ Locale corridor4(37, "You continue down the corridor, stopping before the next i
 Locale corridor5(38, "You enter the last intersection of the corridor", "You are at the center of an intersection", "The floor beneath you is is green");
 Locale corridor5E(39, "You head east in the intersection. There is a door with a number on it.", "You are in the east end of an intersection.", "The number on the door is 40. There is a button with an arrow pointing south...");
 Locale corridor5W(40, "You head west in the intersection. There is a door with a number on it.", "You are in the west end of an intersection.", "The number on the door is 48. There is a button with an arrow pointing south...");
-Locale corridor6(41, "You reach the end of a corridor. There are a pair of doors in front of you.", "You are at an end of the corridor.", "The double has the numbers 46 on it. On each side of the walls, there is an '=' symbol.");
+Locale corridor6(41, "You reach the end of a corridor. There are a pair of doors in front of you.", "You are at an end of the corridor.", "The double doors has the numbers 46 on it. On each side of the walls, there is an '=' symbol.");
 
 //Create an array to act as a dictionary for the locales
 Locale na(-1, "This is stupid", "Seriously.", examineDesc); //So my null constructor is officially useless, because that creates a syntax error when used in arrays
@@ -409,6 +409,51 @@ string use(int localeID, string item) {
             replaceLocation(corridor3.getID(), 2, p);
             replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor3);
             return "Ding!";
+        }
+        //Move the west sides north 1
+        else if(localeID == navigator[corridor1.getID()][3].getID()) {
+            //Location at corridor1W to corridor5W
+            Locale p = navigator[corridor5.getID()][3];
+            replaceLocation(corridor5.getID(), 3, navigator[corridor1.getID()][3]);
+            //Make it so the new location at 5W leads to corridor5
+            replaceLocation(navigator[corridor5.getID()][3].getID(), 2, corridor5);
+            //Location at corridor3E to corridor1E
+            replaceLocation(corridor1.getID(), 3, navigator[corridor3.getID()][3]);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor1);
+            //Location at corridor5E to corridor3E
+            replaceLocation(corridor3.getID(), 3, p);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor3);
+            return "Ding!";
+        }
+        //Move east sides south 1
+        else if(localeID == navigator[corridor5.getID()][2].getID()) {
+            //Location at corridor5E to corridor1E
+            Locale p = navigator[corridor5.getID()][2];
+            replaceLocation(corridor5.getID(), 2, navigator[corridor1.getID()][2]);
+            //Make it so the new location at 5E leads to corridor1
+            replaceLocation(navigator[corridor5.getID()][2].getID(), 3, corridor1);
+            //Location at corridor3E to corridor5E
+            replaceLocation(corridor5.getID(), 2, navigator[corridor3.getID()][2]);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 3, corridor5);
+            //Location at corridor1E to corridor3E
+            replaceLocation(corridor3.getID(), 2, p);
+            replaceLocation(navigator[corridor3.getID()][2].getID(), 3, corridor3);
+            return "Dong!";
+        }
+        //Move west sides down 1
+        else if(localeID == navigator[corridor5.getID()][3].getID()) {
+            //Location at corridor5W to corridor1W
+            Locale p = navigator[corridor5.getID()][3];
+            replaceLocation(corridor5.getID(), 3, navigator[corridor1.getID()][3]);
+            //Make it so the new location at 5W leads to corridor1
+            replaceLocation(navigator[corridor5.getID()][3].getID(), 2, corridor1);
+            //Location at corridor3W to corridor5W
+            replaceLocation(corridor5.getID(), 3, navigator[corridor3.getID()][3]);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor5);
+            //Location at corridor1W to corridor3W
+            replaceLocation(corridor3.getID(), 3, p);
+            replaceLocation(navigator[corridor3.getID()][3].getID(), 2, corridor3);
+            return "Dong!";
         }
         //Switch middles
         else if(localeID == navigator[corridor3.getID()][2].getID() || localeID == navigator[corridor3.getID()][3].getID()) {
