@@ -763,6 +763,22 @@ bool game() {
             cout << ravine._longDescription << endl << "Baby: D'awwwww, did somebody find their mortality?";
             return false;
         }
+        else if(Luca.getLocale() == chairoff.getID()) {
+            if(locations[chairoff.getID()].getItemByIndex("KEY") > -1) {
+                cout << "Baby: Thank you. Have a seat, love.\n"
+                        "Baby: " + Luca._name + ". What a lovely thing you've done here!\n"
+                        "Baby: You aren't dead, for one thing. I think that's something you humans take for granted. You're all dying by the second, really. Oblivious to the very fact.\n"
+                        "Baby: Or maybe you don't care. I for one don't. I for one never die. I. Never. Die. Anywho, I'd like to thank you for entertaining the 'lil baby... observing mortals brings me oh so much joy!" << endl;
+                prompt(cont);
+                getline(cin, command);
+                cout << "You scored " << Luca.getScore() <<  " in " << Luca.getMoves() << " moves." << endl;
+                cout << "Baby: Bye-bye!";
+                return true;
+            }
+            else {
+                cout << "Baby: Well lookie here, you brought Bobbo his key. Ain't that dandy, Bobbo? Just leave it on his desk, will ya?" << endl;
+            }
+        }
         /*
          *
          */
@@ -873,24 +889,21 @@ bool init() {
                 int location = 5;
                 cin >> location;
                 if(location > 41) cout << "Baby: Idiot. 0 to 41." << endl;
-                else Luca.updateID(location);
+                else {
+                    Luca.updateID(location);
+                    cout << locations[location]._longDescription << endl;
+                }
+
             }
             else if(compareIgnoreCase("end", dummy)) Luca._name = "Boy from Nowhere";
-            else cout << "Baby: I'm bored. Hurry up before I kill us all." << endl;
+            else cout << "Baby: Speak. Do not waste my time. I will happily kill us both." << endl;
         }
     }
     cout << "???: " << Luca._name << "? Let's see... gotcha. Your cognitive abilities don't seem to be compromised...  I sense that you want answers. I get it, but I must follow 'protocols.' "
                                 " Ethics and all that human rights junk. Bleeeeh. Boring, really, but hey, it's a living. Let's just test your sense of orientation. Then we'll talk." << endl;
-    //Player mag(dummy, 1);
-
-
 
     prompt(cont);
     getline(cin, dummy);
-
-
-
-    //TODO: skip tutorial if Boy from Nowhere
 
     //Begin tutorial
     if(tutorial()) {
