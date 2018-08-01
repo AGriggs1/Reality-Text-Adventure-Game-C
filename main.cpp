@@ -577,7 +577,11 @@ void decipher(string command) {
         if(localeID > -1) Luca.updateID(localeID);
         else cout << "You cannot go that way." << endl;
     }
-    //NOT GOING TO IMPLEMENT DOWN IN THIS VERSION, IT NEVER GETS USED
+    else if(compareIgnoreCase(command, "down")) {
+        int localeID = navigator[Luca.getLocale()][5].getID();
+        if(localeID > -1) Luca.updateID(localeID);
+        else cout << "You cannot go that way.";
+    }
     //take
     else if(compareIgnoreCase(command.substr(0, 4), "take")) {
         //See if this is a two-word command... try to take with what should be the second half...
