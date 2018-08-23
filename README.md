@@ -18,48 +18,91 @@ Accessing the cheats will automatically skip the tutorial.
 "all items": Typing this will give you every item in the game and remove them from the location they would normally be found in.
 
 "goto": This allows you to go to any location in the game. You will be asked where you want to go after inputing this command. You need to type the ID of the location you want to go, that is, input a number from 0-41. If you do NOT input a number, the game will likely crash. You will be able to see the description of the location you are trying to go to in order to help ascertain that that is where you want to go. The IDs for all of the locations as follows:
+
 0: Placeholder. I.E. not a location.
+
 1: Center of void from the tutorial.
+
 2: The North section of the tutorial.
+
 3: The South section of the tutorial.
+
 4: The East section of the tutorial.
+
 5: The West section of the tutorial.
+
 6: The broom closet.
+
 7: The hallway west of the office.
+
 8: The Northwest section of the office.
+
 9: The West section of the office.
+
 10: The Southwest section of the office.
+
 11: The North section of the office.
+
 12: The Center section of the office.
+
 13: The South section of the office.
+
 14: The Northeast section of the office.
+
 15: The East section of the office.
+
 16: The Southeast section of the office.
+
 17: The hallway east of the office.
+
 18: The forest.
+
 19: The river.
+
 20: The lake.
+
 21: The waterfall.
+
 22: The cave entrance.
+
 23: Inside the cave.
+
 24: The incantation circle.
+
 25: The ravine (this might kill you if try to use this command to go there).
+
 26: The top of the waterfall.
+
 27: The elevator.
+
 28: The elevator after going up.
+
 29: The chairman's office.
+
 30: The first intersection of the corridor.
+
 31: The east end of the first corridor intersection.
+
 32: The west end of the first corridor intersection.
+
 33: The section before the second intersection of the corridor.
+
 34: The second intersection of the corridor.
+
 35: The east end of the second corridor intersection.
+
 36: The west end of the second corridor intersection.
+
 37: The section before the third intersection of the corridor.
+
 38: The third intersection of the corridor.
+
 39: The east end of the third corridor intersection.
+
 40: The west end of the third corridor intersection.
+
 41: The section of the corridor leading to the chairman's office.
+
 
 
 Copyright Anthony Griggs, Anthony.Griggs1@marist.edu
